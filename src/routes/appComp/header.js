@@ -138,6 +138,7 @@ export default function HeaderApp() {
 
     const [showMenus, setMenus] = useState(false);
 
+    const [menuSelection, setMenuSelection] = useState({});
     const [contextMenu, setContextMenu] = useState({});
 
     const [selectedProducts, setSelectedProducts] = useState({});
@@ -196,6 +197,13 @@ export default function HeaderApp() {
     };
 
     const processMenus = () => {
+        axios.get(`${process.env.REACT_APP_API_URL}/api/response?type=menus.details&client_id=${getCookie('client_id')}&at=${getCookie('at')}&ky=${getCookie('ky')} `)
+            .then((response) => {
+                setContextMenu(response.data.message.menus);
+            })
+            .catch((error) => {
+                console.error('Error fetching inbox:', error);
+            });
         setMenus((status) => (status === false ? true : false));
     };
 
@@ -1158,14 +1166,14 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                     <div className='relative flex justify-center w-[50%] px-2 pt-3'>
                                                         <div className='relative w-full'>
                                                             <div className='space-y-2'>
-                                                                {false && (
+                                                                {menuSelection.name && (
                                                                     <div className='w-full px-2'>
                                                                         <div className='relative w-full rounded-xl p-[1px] shadow-[0_0_0_1px_inset_rgba(2,0,3,.2)] space-y-2 py-2'>
                                                                             <div className='px-4 space-y-1'>
                                                                                 <span className='text-xs text-sec font-semibold'>التفاصيل</span>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>القائمة</span>
-                                                                                    <span className='text-xs text-pri font-semibold'>قائمة أساسية</span>
+                                                                                    <span className='text-xs text-pri font-semibold'>{menuSelection.name}</span>
                                                                                 </div>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>رقم العملية</span>
@@ -1236,17 +1244,17 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                 <div className='flex'>
                                                                     <div className='relative w-full px-2'>
                                                                         <div onClick={processMenus} className='flex justify-between select-none cursor-pointer transition duration-100 items-center px-3 min-w-full h-[42px] rounded-xl shadow-[0_0_0_1px_inset_rgba(2,0,3,.5),0_0_0_1px_transparent] hover:shadow-[0_0_0_2px_inset_rgba(2,0,3,.7),0_0_0_1px_transparent]'>
-                                                                            {contextMenu ? (
+                                                                            {!menuSelection.name ? (
                                                                                 <span className='text-sm text-sec/50 font-semibold'>
                                                                                     إختر قائمة
                                                                                 </span>
                                                                             ) : (
                                                                                 <span className='text-sm text-sec font-semibold'>
-                                                                                    قائمة أساسية
+                                                                                    {menuSelection.name}
                                                                                 </span>
                                                                             )}
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                                                                                <path class="fill-sec" d="M12.21,7.25l-3.31,3.31c-0.5,0.5-1.31,0.5-1.81,0L3.79,7.25C2.98,6.44,3.55,5.07,4.69,5.07h6.62
+                                                                                <path class="fill-sec/50" d="M12.21,7.25l-3.31,3.31c-0.5,0.5-1.31,0.5-1.81,0L3.79,7.25C2.98,6.44,3.55,5.07,4.69,5.07h6.62
 	C12.45,5.07,13.02,6.44,12.21,7.25z"/>
                                                                             </svg>
                                                                         </div>
@@ -1257,25 +1265,25 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                 transition={{ duration: 0.1 }}
                                                                                 exit={{ top: 0 }}        // عند الإخفاء
                                                                                 className={`z-[9999] absolute right-0 top-[32px] w-full h-auto min-h-[8px] after:content-[''] after:pointer-events-none after:absolute shadow-xl after:left-0 after:top-0 after:w-full after:h-full after:rounded-xl after:shadow-[0_0_0_1px_rgba(2,0,3,.2)] bg-white rounded-xl`}>
-                                                                                <div className='overflow-y-auto max-h-[480px] overscroll-contain'>
-                                                                                    {contextMenu ? (
-                                                                                        <div className='flex items-center justify-center min-h-[52px]'>
-                                                                                            <div class="spinner"></div>
-                                                                                        </div>
-                                                                                    ) : (
+                                                                                <div className='overflow-y-auto min-[48px] max-h-[480px] overscroll-contain'>
+                                                                                    {contextMenu.length ? (
                                                                                         <>
-                                                                                            <div className='p-1'>
-                                                                                                <button className='relative w-full flex items-center px-2 h-[38px] hover:bg-sec/10 rounded-lg space-x-2 space-x-reverse'>
-                                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24">
-                                                                                                        <path class="fill-transparent stroke-[1.5px] stroke-sec" d="M23,12c0,6.08-4.92,11-11,11S1,18.08,1,12S5.92,1,12,1S23,5.92,23,12z" />
+                                                                                            {contextMenu.map((menu, i) =>
+                                                                                            (
+                                                                                                <div className='p-1'>
+                                                                                                    <button onClick={() => { setMenuSelection({ name: menu.name }); processMenus(false) }} className='relative w-full flex items-center px-2 h-[38px] hover:bg-sec/10 rounded-lg space-x-2 space-x-reverse'>
+                                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24">
+                                                                                                            <path class="fill-transparent stroke-[1.5px] stroke-sec" d="M23,12c0,6.08-4.92,11-11,11S1,18.08,1,12S5.92,1,12,1S23,5.92,23,12z" />
 
-                                                                                                    </svg>
-                                                                                                    <span className='text-sm text-sec font-normal'>
-                                                                                                        قائمة أساسية
-                                                                                                    </span>
+                                                                                                        </svg>
+                                                                                                        <span className='text-sm text-sec font-normal'>
+                                                                                                            {menu.name}
+                                                                                                        </span>
 
-                                                                                                </button>
-                                                                                            </div>
+                                                                                                    </button>
+                                                                                                </div>
+                                                                                            ))
+                                                                                            }
                                                                                             <div className='w-full h-[1px] bg-sec/10'></div>
                                                                                             <div className='p-1'>
                                                                                                 <button className='relative w-full flex items-center px-2 h-[38px] hover:bg-pri/10 rounded-lg space-x-2 space-x-reverse'>
@@ -1290,6 +1298,10 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                                 </button>
                                                                                             </div>
                                                                                         </>
+                                                                                    ) : (
+                                                                                        <div className='flex items-center justify-center min-h-[52px]'>
+                                                                                            <div class="spinner"></div>
+                                                                                        </div>
                                                                                     )}
                                                                                 </div>
                                                                             </motion.div>

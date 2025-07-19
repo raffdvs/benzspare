@@ -453,6 +453,79 @@ app.get('/api/response', (req, res) => {
 
     }
 
+    if (req.query.type === 'menus.details') {
+        const { at, ky } = req.query;
+
+        if (!at || !ky) {
+            return res.status(400).json({ status: false, message: 'Missing token or key' });
+        }
+
+        const getUserSql = `
+        SELECT 
+            id, utoken, uiv, ukey, email, date, name 
+        FROM 
+            users 
+        WHERE 
+            utoken = ? AND ukey = ?
+    `;
+
+        db.query(getUserSql, [at, ky], (err, userData) => {
+            if (err) return res.status(500).send(err);
+            if (!userData?.length) {
+                return res.status(404).json({ status: false, message: 'User not found' });
+            }
+
+            const user = userData[0];
+
+            let decryptedEmail;
+            try {
+                const t = Buffer.from(user.utoken, 'hex');
+                const i = Buffer.from(user.uiv, 'hex');
+                const k = Buffer.from(user.ukey, 'hex');
+                decryptedEmail = decryptText(t, i, k);
+            } catch (error) {
+                return res.status(400).json({ status: false, message: 'Decryption failed' });
+            }
+
+            if (user.email !== decryptedEmail) {
+                return res.status(401).json({ status: false, message: 'Invalid token' });
+            }
+
+            const getMenusdetails = `
+SELECT 
+    m.id,
+    m.id_user,
+    m.name,
+    m.no,
+    m.date
+FROM 
+    menus m
+WHERE 
+    m.id_user = ?
+ORDER BY 
+    m.date DESC;
+        `;
+
+            db.query(getMenusdetails, [user.id], (err, details) => {
+                if (err) return res.status(500).send(err);
+                if (!details?.length) {
+                    return res.json({ status: false, message: 0 });
+                }
+                
+                return res.json({
+                    status: true,
+                    message: {
+                        menus: details.map(m => ({
+                            name: m.name,
+                            number_code: m.no,
+                            date: m.date,
+                        }))
+                    }
+                });
+            });
+        });
+    }
+
     if (req.query.type === 'basket.products') {
         const { at, ky } = req.query;
 
