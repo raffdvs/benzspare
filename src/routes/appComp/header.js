@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import { BrowserRouter as Router, Routes, Route, Switch, Link } from 'react-router-dom';
 import UserStatus, { toggleMenuAccount } from '../../response/res-auth';
+import { menu } from 'framer-motion/client';
 
 
 function formatDate(timestamp) {
@@ -137,6 +138,7 @@ export default function HeaderApp() {
 
     const [showMenus, setMenus] = useState(false);
 
+    const [contextMenu, setContextMenu] = useState({});
 
     const [selectedProducts, setSelectedProducts] = useState({});
 
@@ -926,9 +928,9 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                     </svg>
                                                 </div>
                                                 <div className='text-base text-sec font-normal'>السلة</div>
-                                                {baskets.length !== 0 &&
+                                                {basketsProducts.length !== 0 &&
                                                     (
-                                                        <div className='text-base text-pri font-semibold'>{baskets.length}</div>
+                                                        <div className='text-base text-pri font-semibold'>{basketsProducts.length}</div>
                                                     )
                                                 }
                                                 <div className='uspace-10'></div>
@@ -951,7 +953,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                 <div className='absolute flex justify-center items-center top-3 left-0 p-2 pt-0 w-full'>
                                                     <div className={`flex items-center h-[48px] px-3 bg-sec/40 backdrop-blur-md rounded-2xl ${Object.values(selectedProducts).some(value => value === true) ? 'block' : 'hidden'} ${baskets.length !== 0 && 'active'}`}>
                                                         <div className='flex items-center justify-center h-[32px] px-3 bg-pri rounded-xl text-nowrap'><span className='text-white text-sm font-semibold'>
-                                                            {Object.values(selectedProducts).filter(value => value === true).length} / {baskets.length}</span></div>
+                                                            {Object.values(selectedProducts).filter(value => value === true).length} / {basketsProducts.length}</span></div>
                                                         <div className='space-10'></div>
                                                         <button className='flex items-center justify-center h-[32px] min-w-[32px] bg-white/20 hover:bg-white/25 rounded-xl' onClick={resetSelectionOnClose}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 16 16" className='fill-white'>
@@ -1233,10 +1235,20 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                 )}
                                                                 <div className='flex'>
                                                                     <div className='relative w-full px-2'>
-                                                                        <div onClick={processMenus} className='flex select-none cursor-pointer transition duration-100 items-center px-3 min-w-full h-[42px] rounded-xl shadow-[0_0_0_1px_inset_rgba(2,0,3,.5),0_0_0_1px_transparent] hover:shadow-[0_0_0_2px_inset_rgba(2,0,3,.7),0_0_0_1px_transparent]'>
-                                                                            <span className='text-sm text-sec font-semibold'>
-                                                                                قائمة أساسية
-                                                                            </span>
+                                                                        <div onClick={processMenus} className='flex justify-between select-none cursor-pointer transition duration-100 items-center px-3 min-w-full h-[42px] rounded-xl shadow-[0_0_0_1px_inset_rgba(2,0,3,.5),0_0_0_1px_transparent] hover:shadow-[0_0_0_2px_inset_rgba(2,0,3,.7),0_0_0_1px_transparent]'>
+                                                                            {contextMenu ? (
+                                                                                <span className='text-sm text-sec/50 font-semibold'>
+                                                                                    إختر قائمة
+                                                                                </span>
+                                                                            ) : (
+                                                                                <span className='text-sm text-sec font-semibold'>
+                                                                                    قائمة أساسية
+                                                                                </span>
+                                                                            )}
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+                                                                                <path class="fill-sec" d="M12.21,7.25l-3.31,3.31c-0.5,0.5-1.31,0.5-1.81,0L3.79,7.25C2.98,6.44,3.55,5.07,4.69,5.07h6.62
+	C12.45,5.07,13.02,6.44,12.21,7.25z"/>
+                                                                            </svg>
                                                                         </div>
                                                                         {showMenus && (
                                                                             <motion.div
@@ -1246,31 +1258,39 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                 exit={{ top: 0 }}        // عند الإخفاء
                                                                                 className={`z-[9999] absolute right-0 top-[32px] w-full h-auto min-h-[8px] after:content-[''] after:pointer-events-none after:absolute shadow-xl after:left-0 after:top-0 after:w-full after:h-full after:rounded-xl after:shadow-[0_0_0_1px_rgba(2,0,3,.2)] bg-white rounded-xl`}>
                                                                                 <div className='overflow-y-auto max-h-[480px] overscroll-contain'>
-                                                                                    <div className='p-1'>
-                                                                                        <button className='relative w-full flex items-center px-2 h-[38px] hover:bg-sec/10 rounded-lg space-x-2 space-x-reverse'>
-                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24">
-                                                                                                <path class="fill-transparent stroke-[1.5px] stroke-sec" d="M23,12c0,6.08-4.92,11-11,11S1,18.08,1,12S5.92,1,12,1S23,5.92,23,12z" />
+                                                                                    {contextMenu ? (
+                                                                                        <div className='flex items-center justify-center min-h-[52px]'>
+                                                                                            <div class="spinner"></div>
+                                                                                        </div>
+                                                                                    ) : (
+                                                                                        <>
+                                                                                            <div className='p-1'>
+                                                                                                <button className='relative w-full flex items-center px-2 h-[38px] hover:bg-sec/10 rounded-lg space-x-2 space-x-reverse'>
+                                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24">
+                                                                                                        <path class="fill-transparent stroke-[1.5px] stroke-sec" d="M23,12c0,6.08-4.92,11-11,11S1,18.08,1,12S5.92,1,12,1S23,5.92,23,12z" />
 
-                                                                                            </svg>
-                                                                                            <span className='text-sm text-sec font-normal'>
-                                                                                                قائمة أساسية
-                                                                                            </span>
+                                                                                                    </svg>
+                                                                                                    <span className='text-sm text-sec font-normal'>
+                                                                                                        قائمة أساسية
+                                                                                                    </span>
 
-                                                                                        </button>
-                                                                                    </div>
-                                                                                    <div className='w-full h-[1px] bg-sec/10'></div>
-                                                                                    <div className='p-1'>
-                                                                                        <button className='relative w-full flex items-center px-2 h-[38px] hover:bg-pri/10 rounded-lg space-x-2 space-x-reverse'>
-                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24">
-                                                                                                <path class="fill-transparent stroke-[1.5px] stroke-pri" d="M23,12c0,6.08-4.92,11-11,11S1,18.08,1,12S5.92,1,12,1S23,5.92,23,12z M12,6v6h6 M12,18v-6H6" />
+                                                                                                </button>
+                                                                                            </div>
+                                                                                            <div className='w-full h-[1px] bg-sec/10'></div>
+                                                                                            <div className='p-1'>
+                                                                                                <button className='relative w-full flex items-center px-2 h-[38px] hover:bg-pri/10 rounded-lg space-x-2 space-x-reverse'>
+                                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24">
+                                                                                                        <path class="fill-transparent stroke-[1.5px] stroke-pri" d="M23,12c0,6.08-4.92,11-11,11S1,18.08,1,12S5.92,1,12,1S23,5.92,23,12z M12,6v6h6 M12,18v-6H6" />
 
-                                                                                            </svg>
-                                                                                            <span className='text-sm text-pri font-normal'>
-                                                                                                إنشاء قائمة جديدة
-                                                                                            </span>
+                                                                                                    </svg>
+                                                                                                    <span className='text-sm text-pri font-normal'>
+                                                                                                        إنشاء قائمة جديدة
+                                                                                                    </span>
 
-                                                                                        </button>
-                                                                                    </div>
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        </>
+                                                                                    )}
                                                                                 </div>
                                                                             </motion.div>
                                                                         )}

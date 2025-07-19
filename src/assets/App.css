@@ -3342,6 +3342,22 @@ button.popupLayout-btnTool:hover {
   background: var(--main-colCity-15);
 }
 
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(farthest-side, #cc0023 94%, #0000) top/3px 3px no-repeat,
+    conic-gradient(#0000 30%, #cc0023);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 3px), #000 0);
+  animation: spinner-c7wet2 1s infinite linear;
+}
+
+@keyframes spinner-c7wet2 {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
 div.checkLayout-box {
   display: flex;
   align-items: center;
@@ -4624,6 +4640,7 @@ button.popupLayout-btnSelectAll:hover {
   cursor: pointer;
   background: var(--main-colCity-15);
 }
+
 button.popupLayout-btnProcess {
   position: relative;
   height: 38px;
