@@ -495,10 +495,10 @@ export default function HeaderApp() {
 
     return (
         <div className='header'>
-            <div className={`flex justify-between items-center head py-[10px] px-[20px] `}>
-
+            <div className='absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-white/90 backdrop-blur-xl'></div>
+            <div className={`relative flex justify-between items-center pointer-events-auto py-[16px] px-[32px] `}>
                 <div className='flex space-x-3 space-x-reverse'>
-                    <Link to='/' className='logo h-[24px] min-w-[24px]'>
+                    <Link to='/' className='group logo h-[32px] min-w-[32px]'>
                         {/* <svg xmlns="http://www.w3.org/2000/svg" width="70px"
                         height="16px" viewBox="0 0 70 16" className='icon-color'>
                         <g>
@@ -531,8 +531,8 @@ export default function HeaderApp() {
                         </g>
                     </svg>
                     <div className='space-10'></div> */}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 32 32">
-                            <path class="icon-color" d="M32,16c0,7.84-5.64,14.36-13.08,15.73C17.97,31.91,17,32,16,32s-1.97-0.09-2.92-0.27C5.64,30.36,0,23.84,0,16
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 32 32">
+                            <path class="transition duration-100 fill-pri group-hover:fill-pri/80" d="M32,16c0,7.84-5.64,14.36-13.08,15.73C17.97,31.91,17,32,16,32s-1.97-0.09-2.92-0.27C5.64,30.36,0,23.84,0,16
 	C0,7.16,7.16,0,16,0S32,7.16,32,16z"/>
                             <path class="icon-white" d="M24.17,9.4l-4.4-2.55c-0.15-0.09-0.34-0.09-0.5,0c-0.15,0.09-0.25,0.25-0.25,0.43v7.52
 	c0,0.18-0.1,0.34-0.25,0.43l-2.56,1.47c-0.15,0.09-0.35,0.09-0.5,0l-2.56-1.47c-0.15-0.09-0.25-0.25-0.25-0.43V7.28
@@ -544,8 +544,8 @@ export default function HeaderApp() {
                         </svg>
                     </Link>
 
-                    <button onClick={toggleSearch} className='group'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" className="fill-transparent">
+                    <button onClick={toggleSearch} className='group flex items-center justify-center w-[32px] h-[32px] rounded-full transition duration-100 bg-sec/15 hover:bg-sec/10'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 20 20" className="fill-transparent">
                             <rect class="fill-transparent" width="20" height="20" />
 
                             {/* <g id="Iconly/Light-Outline/Search" stroke="none" stroke-width="1.5" fill="none" fill-rule="evenodd">
@@ -555,7 +555,7 @@ export default function HeaderApp() {
                             </g> */}
 
 
-                            <path className='stroke-[1.5px] stroke-sec group-hover:stroke-sec/70' d="M15.31,8c0,3.87-3.13,7-7,7s-7-3.13-7-7s3.13-7,7-7S15.31,4.13,15.31,8z M12.94,13.25L18.69,19" />
+                            <path className='stroke-[2px] stroke-sec group-hover:stroke-sec/70' d="M15.31,8c0,3.87-3.13,7-7,7s-7-3.13-7-7s3.13-7,7-7S15.31,4.13,15.31,8z M12.94,13.25L18.69,19" />
 
                         </svg>
                         <div className='tooltip'>
@@ -675,13 +675,13 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                     ) : (
                         <div className='flex space-x-4 space-x-reverse'>
 
-                            <button onClick={ShwMessages} className='group'>
+                            <button onClick={ShwMessages} className='group flex items-center justify-center w-[32px] h-[32px] rounded-full transition duration-100 bg-sec/15 hover:bg-sec/10'>
                                 {/* <div className='basket-quantity'>
 						<div className='basket-number'>
 							0
 						</div>
 					</div> */}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" className="fill-transparent stroke-[1.5px] stroke-sec group-hover:stroke-sec/70">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" className="fill-transparent stroke-[2px] stroke-sec group-hover:stroke-sec/70">
                                     <rect class="fill-transparent stroke-transparent" width="24" height="24" />
                                     <path d="M12,23H1l1.99-2.25c0.62-0.7,0.8-1.7,0.45-2.57l-1-2.53C-0.34,8.61,4.87,0.72,12.43,1.01
 	c0.27,0.01,0.55,0.03,0.82,0.06c5.03,0.56,9.12,4.65,9.68,9.68C23.66,17.38,18.49,23,12,23 M7,9.98h10 M7,14.02h6.47"/>
@@ -788,8 +788,8 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                     </div>
                                 </div>
                             )}
-                            <button type='button' onClick={toggleMenuAccount} className='rounded-full transition duration-100 hover:shadow-[0_0_0_2px_rgba(204,0,35,0.25)]'>
-                                <div className='bg-pri min-w-[20px] h-[20px] rounded-full text-white font-semibold text-xs flex justify-center items-center'>{data[0]}</div>
+                            <button type='button' onClick={toggleMenuAccount} className='rounded-full transition'>
+                                <div className='bg-pri min-w-[32px] h-[32px] rounded-full text-white font-semibold text-xs flex justify-center items-center'>{data[0]}</div>
                             </button>
                             {showMenuAccount && (
                                 <div className={`absolute top-12 left-28 ${showMenuAccount === false && ' hidden'}`}>
@@ -901,13 +901,13 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                             )}
 
 
-                            <button onClick={toggleBasket} className='group'>
+                            <button onClick={toggleBasket} className='group flex items-center justify-center w-[32px] h-[32px] rounded-full transition duration-100 bg-sec/15 hover:bg-sec/10'>
                                 {/* <div className='basket-quantity'>
 						<div className='basket-number'>
 							0
 						</div>
 					</div> */}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 24 24" className="fill-transparent stroke-[1.5px] stroke-sec group-hover:stroke-sec/70">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" className="fill-transparent stroke-[2px] stroke-sec group-hover:stroke-sec/70">
                                     <rect class="fill-transparent stroke-transparent" width="24" height="24" />
                                     <path d="M18.45,23H5.55c-1.11,0-2.06-0.78-2.27-1.86l-1.86-9.28c-0.29-1.44,0.81-2.77,2.27-2.77h16.61
 	c1.46,0,2.56,1.34,2.27,2.77l-1.86,9.28C20.51,22.22,19.56,23,18.45,23z M5.04,5.04h13.92 M7.36,1h9.28"/>
@@ -1074,8 +1074,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                 Object.keys(selectedProducts)
                                                                                     .filter((key) => selectedProducts[key])
                                                                                     .reduce((total, key) => {
-                                                                                        const productId = basketsProducts[key].id;
-                                                                                        const product = basketsProducts.find((product) => product.id === productId);
+                                                                                        const product = basketsProducts[key];
                                                                                         const quantity = quantitys[key] || 1;
                                                                                         return total + (product ? product.price * quantity : 0);
                                                                                     }, 0)
@@ -1121,8 +1120,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                 Object.keys(selectedProducts)
                                                                                     .filter((key) => selectedProducts[key])
                                                                                     .reduce((total, key) => {
-                                                                                        const productId = basketsProducts[key].id;
-                                                                                        const product = basketsProducts.find((product) => product.id === productId);
+                                                                                        const product = basketsProducts[key];
                                                                                         const quantity = quantitys[key] || 1;
                                                                                         return total + (product ? product.price * quantity : 0);
                                                                                     }, 0)
@@ -1188,8 +1186,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                                 Object.keys(selectedProducts)
                                                                                                     .filter((key) => selectedProducts[key])
                                                                                                     .reduce((total, key) => {
-                                                                                                        const productId = basketsProducts[key].id;
-                                                                                                        const product = basketsProducts.find((product) => product.id === productId);
+                                                                                                        const product = basketsProducts[key];
                                                                                                         const quantity = quantitys[key] || 1;
                                                                                                         return total + (product ? product.price * quantity : 0);
                                                                                                     }, 0)
@@ -1239,6 +1236,27 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                        <div className='flex space-x-2 space-x-reverse px-3 my-2'>
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 16 16" class="stroke-sec/70 stroke-[1.5px] fill-transparent">
+                                                                                <path d="M15,8c0,3.87-3.13,7-7,7s-7-3.13-7-7s3.13-7,7-7S15,4.13,15,8z M8,4.5v4.2 M8,10.8v0.7" />
+                                                                            </svg>
+                                                                            <span className='text-xs font-normal text-sec/70'>تُضاف العناصر مباشرة إلى القائمة المحددة بعد تأكيد الشراء.
+                                                                                <span className='flex items-center text-pri font-semibold text-xs'>
+                                                                                    <Link className='flex items-center hover:underline space-x-1 space-x-reverse'>
+                                                                                        <span className='text-nowrap'>
+                                                                                            معرفة المزيد
+                                                                                        </span>
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10px"
+                                                                                            height="10px" viewBox="0 0 12 12" className='fill-pri'>
+                                                                                            <path d="M11.78,10.72L2.56,1.5H6c0.41,0,0.75-0.34,0.75-0.75S6.41,0,6,0H0.75c-0.1,0-0.19,0.02-0.29,0.06
+	C0.28,0.13,0.13,0.28,0.06,0.46C0.02,0.56,0,0.65,0,0.75V6c0,0.41,0.34,0.75,0.75,0.75S1.5,6.41,1.5,6V2.56l9.22,9.22
+	c0.15,0.15,0.34,0.22,0.53,0.22s0.38-0.07,0.53-0.22C12.07,11.49,12.07,11.01,11.78,10.72z"/>
+
+                                                                                        </svg>
+                                                                                    </Link>
+                                                                                </span>
+                                                                            </span>
+                                                                        </div>
                                                                     </div>
                                                                 )}
                                                                 <div className='flex'>
@@ -1276,7 +1294,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                                             <path class="fill-transparent stroke-[1.5px] stroke-sec" d="M23,12c0,6.08-4.92,11-11,11S1,18.08,1,12S5.92,1,12,1S23,5.92,23,12z" />
 
                                                                                                         </svg>
-                                                                                                        <span className='text-sm text-sec font-normal'>
+                                                                                                        <span className={`text-sm text-sec ${menu.name === menuSelection.name ? 'font-semibold' : 'font-normal'}`}>
                                                                                                             {menu.name}
                                                                                                         </span>
 
@@ -1308,31 +1326,10 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                         )}
                                                                     </div>
                                                                 </div>
-                                                                <div className='flex space-x-2 space-x-reverse px-3'>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 16 16" class="stroke-sec/70 stroke-[1.5px] fill-transparent">
-                                                                        <path d="M15,8c0,3.87-3.13,7-7,7s-7-3.13-7-7s3.13-7,7-7S15,4.13,15,8z M8,4.5v4.2 M8,10.8v0.7" />
-                                                                    </svg>
-                                                                    <span className='text-xs font-normal text-sec/70'>تُضاف العناصر مباشرة إلى القائمة المحددة بعد تأكيد الشراء.
-                                                                        <span className='flex items-center text-pri font-semibold text-xs'>
-                                                                            <Link className='flex items-center hover:underline space-x-1 space-x-reverse'>
-                                                                                <span className='text-nowrap'>
-                                                                                    معرفة المزيد
-                                                                                </span>
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="10px"
-                                                                                    height="10px" viewBox="0 0 12 12" className='fill-pri'>
-                                                                                    <path d="M11.78,10.72L2.56,1.5H6c0.41,0,0.75-0.34,0.75-0.75S6.41,0,6,0H0.75c-0.1,0-0.19,0.02-0.29,0.06
-	C0.28,0.13,0.13,0.28,0.06,0.46C0.02,0.56,0,0.65,0,0.75V6c0,0.41,0.34,0.75,0.75,0.75S1.5,6.41,1.5,6V2.56l9.22,9.22
-	c0.15,0.15,0.34,0.22,0.53,0.22s0.38-0.07,0.53-0.22C12.07,11.49,12.07,11.01,11.78,10.72z"/>
-
-                                                                                </svg>
-                                                                            </Link>
-                                                                        </span>
-                                                                    </span>
-                                                                </div>
                                                                 <div className='absolute bottom-0 left-0 h-[60px] px-3 flex items-center justify-between'>
                                                                     <div className='flex items-center justify-between'>
                                                                         <div className='flex space-x-2 space-x-reverse'>
-                                                                            <button onClick={() => { processBuyBasket(); document.body.style.overflow = 'auto' }} className='px-4 h-[32px] transition duration-100 shadow-[0_0_0_1px_inset_rgba(2,0,3,.5),0_0_0_1px_transparent] hover:shadow-[0_0_0_2px_inset_rgba(2,0,3,.7),0_0_0_1px_transparent] rounded-full'><span className='text-sec text-xs font-semibold'>إلغاء</span></button>
+                                                                            <button onClick={() => { processBuyBasket(); document.body.style.overflow = 'auto' }} className='px-4 h-[32px] transition duration-100 shadow-[0_0_0_1px_inset_rgba(2,0,3,.2),0_0_0_1px_transparent] hover:shadow-[0_0_0_1px_inset_rgba(2,0,3,1),0_0_0_1px_transparent] rounded-full'><span className='text-sec text-xs font-semibold'>إلغاء</span></button>
                                                                             <button className='px-4 h-[32px] transition duration-100 bg-sec hover:bg-sec/80 rounded-full'><span className='text-white text-xs font-semibold'>تأكيد الشراء</span></button>
                                                                         </div>
                                                                     </div>

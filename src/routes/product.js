@@ -268,31 +268,45 @@ export default function Product() {
     return <div>
         {headerApp()}
         <div className='productCenter'>
-            <div className='flex justify-center items-center h-screen w-full space-x-12 space-x-reverse'>
-                <div className='GalleryProduct space-y-8'>
-                    <div className='text-2xl text-sec font-semibold'>{service.t}</div>
-
-                    <div className='relative flex justify-center w-[600px] h-[380px] shadow-[0_0_0_2px_rgba(2,0,3,.1)] rounded-2xl'>
-                        <img src={`/img/${service.i}.jpg`} className='layoutProduct-image' />
-                    </div>
-                    <div className='LayoutProduct-gallery'>
-                        <div className='LayoutProduct-collect'>
-                            <img src={`/img/${service.i}.jpg`} className='layoutProduct-image' />
+            <div className='flex justify-center py-6 h-screen w-full space-x-12 space-x-reverse'>
+                <div className='GalleryProduct space-y-6'>
+                    <div className='relative grid mb-6 space-y-2'>
+                        <span className='text-2xl text-sec font-semibold'>{service.t}</span>
+                        <div className='flex'>
+                            <div className='text-pri text-xs font-semibold space-x-1 space-x-reverse'><span>{service.section_name}</span><span className='text-sec/50'>/</span><span>{service.type_name}</span></div>
                         </div>
                     </div>
-                </div>
-                <div className='LayoutProduct-info'>
-                    <div>
-                        <div className='grid text-base'>
-                            <span className='text-sec/70'>
+
+
+                    <div className='flex justify-between w-full space-x-6 space-x-reverse'>
+                        <div className='relative flex flex-col justify-end h-[395px]'>
+                            <div className={`relative h-[58px] w-[58px] shadow-[0_0_0_2px_rgba(204,0,35,1)] rounded-xl`}>
+                                <img src={`/img/${service.i}.jpg`} className='h-[58px] w-[58px] rounded-2xl' />
+                            </div>
+
+                        </div>
+                        <div className={`relative flex justify-center min-w-[calc(100%-58px-1.5rem)] min-w-[490px] h-[395px] p-3 rounded-2xl`}>
+                            <div className={`relative before:content-[''] before:pointer-events-none before:absolute before:left-0 before:top-0 before:w-full before:h-full before:rounded-2xl before:shadow-[0_0_16px_rgba(2,0,3,.1),0_0_0_2px_rgba(2,0,3,.1)] rounded-2xl`}>
+                                <img src={`/img/${service.i}.jpg`} className='layoutProduct-image rounded-2xl shadow-xl' />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='relative flex items-center justify-between shadow-[0_0_0_1px_rgba(2,0,3,.15)] rounded-full p-3 px-4'>
+                        <div className='relative grid px-4'>
+                            <span className='text-sm text-sec/50'>
                                 السعر
                             </span>
-
-                            <span className='text-sec text-xl font-semibold'>
+                            <span className='text-sec text-xl font-semibold underline'>
                                 {formatNumber(0, service.p)} ج.م
                             </span>
-                        </div>
 
+                        </div>
+                        <div>
+                            <button className='flex items-center justify-center w-[148px] h-[42px] rounded-full transition duration-100 bg-pri hover:bg-pri/85'>
+                                <span className='text-base font-semibold text-white'>إضافة للسلة</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -302,19 +316,46 @@ export default function Product() {
             <div>
                 <div className='flex items-center justify-center text-2xl font-semibold space-x-2 space-x-reverse'>
                     <span className='flex items-center space-x-2 space-x-reverse'>
-                        <span>{service.total_ratings ? (service.average_rating).toFixed(2) : ('0.0')}</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 18 18" className={`fill-sec`}>
-                            <rect className="transparent" width="18" height="18" />
-                            <path d="M10.2,2.2l1.02,3.15c0.17,0.52,0.65,0.87,1.2,0.87h3.31c1.22,0,1.73,1.57,0.74,2.28l-2.68,1.95
-	c-0.44,0.32-0.63,0.89-0.46,1.41l1.02,3.15c0.38,1.16-0.95,2.13-1.94,1.41l-2.68-1.95c-0.44-0.32-1.04-0.32-1.48,0l-2.68,1.95
-	c-0.99,0.72-2.32-0.25-1.94-1.41l1.02-3.15c0.17-0.52-0.02-1.09-0.46-1.41L1.52,8.51C0.53,7.79,1.04,6.22,2.27,6.22h3.31
-	c0.55,0,1.03-0.35,1.2-0.87L7.8,2.2C8.18,1.04,9.82,1.04,10.2,2.2z"/>
-                        </svg>
+                        <span className='text-3xl text-sec font-semibold'>{service.total_ratings ? (service.average_rating).toFixed(2) : ('0.0')}</span>
                     </span>
-                    <span className='text-xl text-sec font-normal'>•</span>
-                    <span>
-                        {service.total_ratings ? formatNumber(1, service.total_ratings) : '0'} مراجعة
-                    </span>
+                </div>
+                <div className='flex items-center'>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" viewBox="0 0 18 18" className={service.total_ratings ? (service.average_rating > 0.99 ? ('icon-ratingAct fill-sec') : ('icon-rating fill-sec/50')) : ('icon-rating')}>
+                        <rect className="transparent" width="18" height="18" />
+                        <path d="M10.2,2.2l1.02,3.15c0.17,0.52,0.65,0.87,1.2,0.87h3.31c1.22,0,1.73,1.57,0.74,2.28l-2.68,1.95
+    c-0.44,0.32-0.63,0.89-0.46,1.41l1.02,3.15c0.38,1.16-0.95,2.13-1.94,1.41l-2.68-1.95c-0.44-0.32-1.04-0.32-1.48,0l-2.68,1.95
+    c-0.99,0.72-2.32-0.25-1.94-1.41l1.02-3.15c0.17-0.52-0.02-1.09-0.46-1.41L1.52,8.51C0.53,7.79,1.04,6.22,2.27,6.22h3.31
+    c0.55,0,1.03-0.35,1.2-0.87L7.8,2.2C8.18,1.04,9.82,1.04,10.2,2.2z"/>
+                    </svg>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" viewBox="0 0 18 18" className={service.total_ratings ? (service.average_rating > 0.99 ? ('icon-ratingAct fill-sec') : ('icon-rating fill-sec/50')) : ('icon-rating')}>
+                        <rect className="transparent" width="18" height="18" />
+                        <path d="M10.2,2.2l1.02,3.15c0.17,0.52,0.65,0.87,1.2,0.87h3.31c1.22,0,1.73,1.57,0.74,2.28l-2.68,1.95
+    c-0.44,0.32-0.63,0.89-0.46,1.41l1.02,3.15c0.38,1.16-0.95,2.13-1.94,1.41l-2.68-1.95c-0.44-0.32-1.04-0.32-1.48,0l-2.68,1.95
+    c-0.99,0.72-2.32-0.25-1.94-1.41l1.02-3.15c0.17-0.52-0.02-1.09-0.46-1.41L1.52,8.51C0.53,7.79,1.04,6.22,2.27,6.22h3.31
+    c0.55,0,1.03-0.35,1.2-0.87L7.8,2.2C8.18,1.04,9.82,1.04,10.2,2.2z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" viewBox="0 0 18 18" className={service.total_ratings ? (service.average_rating > 0.99 ? ('icon-ratingAct fill-sec') : ('icon-rating fill-sec/50')) : ('icon-rating')}>
+                        <rect className="transparent" width="18" height="18" />
+                        <path d="M10.2,2.2l1.02,3.15c0.17,0.52,0.65,0.87,1.2,0.87h3.31c1.22,0,1.73,1.57,0.74,2.28l-2.68,1.95
+    c-0.44,0.32-0.63,0.89-0.46,1.41l1.02,3.15c0.38,1.16-0.95,2.13-1.94,1.41l-2.68-1.95c-0.44-0.32-1.04-0.32-1.48,0l-2.68,1.95
+    c-0.99,0.72-2.32-0.25-1.94-1.41l1.02-3.15c0.17-0.52-0.02-1.09-0.46-1.41L1.52,8.51C0.53,7.79,1.04,6.22,2.27,6.22h3.31
+    c0.55,0,1.03-0.35,1.2-0.87L7.8,2.2C8.18,1.04,9.82,1.04,10.2,2.2z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" viewBox="0 0 18 18" className={service.total_ratings ? (service.average_rating > 0.99 ? ('icon-ratingAct fill-sec') : ('icon-rating fill-sec/50')) : ('icon-rating')}>
+                        <rect className="transparent" width="18" height="18" />
+                        <path d="M10.2,2.2l1.02,3.15c0.17,0.52,0.65,0.87,1.2,0.87h3.31c1.22,0,1.73,1.57,0.74,2.28l-2.68,1.95
+    c-0.44,0.32-0.63,0.89-0.46,1.41l1.02,3.15c0.38,1.16-0.95,2.13-1.94,1.41l-2.68-1.95c-0.44-0.32-1.04-0.32-1.48,0l-2.68,1.95
+    c-0.99,0.72-2.32-0.25-1.94-1.41l1.02-3.15c0.17-0.52-0.02-1.09-0.46-1.41L1.52,8.51C0.53,7.79,1.04,6.22,2.27,6.22h3.31
+    c0.55,0,1.03-0.35,1.2-0.87L7.8,2.2C8.18,1.04,9.82,1.04,10.2,2.2z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" viewBox="0 0 18 18" className={service.total_ratings ? (service.average_rating > 0.99 ? ('icon-ratingAct fill-sec') : ('icon-rating fill-sec/50')) : ('icon-rating')}>
+                        <rect className="transparent" width="18" height="18" />
+                        <path d="M10.2,2.2l1.02,3.15c0.17,0.52,0.65,0.87,1.2,0.87h3.31c1.22,0,1.73,1.57,0.74,2.28l-2.68,1.95
+    c-0.44,0.32-0.63,0.89-0.46,1.41l1.02,3.15c0.38,1.16-0.95,2.13-1.94,1.41l-2.68-1.95c-0.44-0.32-1.04-0.32-1.48,0l-2.68,1.95
+    c-0.99,0.72-2.32-0.25-1.94-1.41l1.02-3.15c0.17-0.52-0.02-1.09-0.46-1.41L1.52,8.51C0.53,7.79,1.04,6.22,2.27,6.22h3.31
+    c0.55,0,1.03-0.35,1.2-0.87L7.8,2.2C8.18,1.04,9.82,1.04,10.2,2.2z"/>
+                    </svg>
                 </div>
             </div>
             <div className='space-40'></div>
@@ -324,18 +365,21 @@ export default function Product() {
                     {!service ? (
                         <p></p>
                     ) : (
-                        <div className='productCenter-ratingsProgress'>
-                            {[5, 4, 3, 2, 1].map((star) => (
-                                <div key={star} className='flex items-center'>
-                                    <span className='text-xs text-sec font-normal w-4'>{star}</span>
-                                    <div className='w-[150px] h-[4px] bg-sec/10 rounded-full'>
-                                        <div
-                                            className='h-[4px] bg-sec rounded-full transition-all duration-300'
-                                            style={{ width: getWidth(ratings[star]) }}
-                                        ></div>
+                        <div className='productCenter-ratingsProgress space-y-2'>
+                            <span className='text-[12px] font-semibold text-sec'>التقييم العام</span>
+                            <div>
+                                {[5, 4, 3, 2, 1].map((star) => (
+                                    <div key={star} className='flex items-center'>
+                                        <span className='text-xs text-sec font-normal w-4'>{star}</span>
+                                        <div className='w-[128px] h-[4px] bg-sec/10 rounded-full'>
+                                            <div
+                                                className='h-[4px] bg-sec rounded-full transition-all duration-300'
+                                                style={{ width: getWidth(ratings[star]) }}
+                                            ></div>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>
@@ -350,20 +394,26 @@ export default function Product() {
         </div> */}
 
         <div className='layoutHome-bestSelling'>
-            <div className='layoutDisplay-text'>منتجات مشابهة<div className='uspace-10'></div><Link to={'/shop'} className='layoutDisplay-btn'>عرض الكل<div className='space-10'></div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 16 16" class="icon-color"><rect class="transparent" width="16" height="16"></rect><path d="M12.24,14.05c0.45,0.45,0.45,1.17,0,1.62C12.01,15.89,11.72,16,11.43,16c-0.29,0-0.58-0.11-0.81-0.33L3.76,8.81
+            <div className='flex'>
+                <Link to={'/shop'} className='text-xl mx-5 font-semibold text-sec flex items-center text-nowrap flex space-x-1 space-x-reverse'><span>منتجات مشابهة</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 16 16" class="fill-sec"><rect class="transparent" width="16" height="16"></rect><path d="M12.24,14.05c0.45,0.45,0.45,1.17,0,1.62C12.01,15.89,11.72,16,11.43,16c-0.29,0-0.58-0.11-0.81-0.33L3.76,8.81
  c-0.45-0.45-0.45-1.17,0-1.62l6.86-6.86c0.45-0.45,1.17-0.45,1.62,0c0.45,0.45,0.45,1.17,0,1.62L6.19,8L12.24,14.05z"></path></svg>
 
-            </Link></div>
+                </Link>
+            </div>
             <div className={`layoutDisplay`}>
                 <div className='layoutDisplay-products'>
                     {services.map((service) => (
                         <div className='p-2'>
                             <div className='flwd space-y-2'>
                                 <div className='flex fwid h-center'>
-                                    <Link to={`/product/${service.title}`} className='preventDefault group rounded-3xl'>
-                                        <img src={`/img/${service.image}.jpg`} className=' h-[168px] min-w-[168px] rounded-3xl transition all duration-100 shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_4px_rgba(2,0,3,0.1)]'></img>
-                                    </Link>
+                                    <div className='relative h-[168px] min-w-[168px] group'>
+                                        <Link to={`/product/${service.title}`} className='preventDefault group rounded-3xl'>
+                                            <div class="absolute transition duration-100 h-[168px] min-w-[168px] left-0 top-0 inset-0 rounded-3xl group-hover:blur-sm opacity-70 -z-10 bg-gradient-to-t from-pri to-pri"></div>
+
+                                            <img src={`/img/${service.image}.jpg`} className=' h-[168px] min-w-[168px] rounded-3xl transition all duration-100 shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_2px_rgba(204,0,35,1)]'></img>
+                                        </Link>
+                                    </div>
                                 </div>
 
                                 <div className='product-disc space-y-1'>
@@ -371,7 +421,7 @@ export default function Product() {
                                         <div className='text-sec text-sm font-semibold'>{service.title}</div>
                                     </div>
                                     <div className='flex'>
-                                        <div className='text-pri text-[14px] font-normal'>{service.type_name}</div>
+                                        <div className='text-pri text-xs font-semibold space-x-1 space-x-reverse'><span>{service.section_name}</span><span className='text-[8px] text-sec/70'>•</span><span>{service.type_name}</span></div>
                                     </div>
                                     <div className='flex'>
                                         <div>

@@ -249,7 +249,10 @@ SELECT
   mk.mark AS mn,
   mk.logo_id AS mli,
   ml.model AS mln,
-  typ.type AS tys,
+  
+    t.type AS type_name,
+    s.id AS section_id,
+    s.name AS section_name,
  ROUND(COALESCE(AVG(r.rating), 0), 1) AS average_rating,
   COALESCE(COUNT(r.rating), 0) AS total_ratings,
 
@@ -267,12 +270,14 @@ INNER JOIN
   marks mk ON p.mark = mk.id
 INNER JOIN 
   models ml ON ml.mark_id = mk.id
-INNER JOIN 
-  types typ ON p.type_id = typ.id
+       LEFT JOIN
+            types t ON p.type_id = t.id
+        LEFT JOIN 
+        sections s ON t.id_section = p.type_id
 WHERE 
   p.title = ?
 GROUP BY 
-  p.id, mk.mark, mk.logo_id, ml.model, typ.type
+  p.id, mk.mark, mk.logo_id, ml.model, t.type
 ORDER BY 
   average_rating DESC;
 
@@ -511,7 +516,7 @@ ORDER BY
                 if (!details?.length) {
                     return res.json({ status: false, message: 0 });
                 }
-                
+
                 return res.json({
                     status: true,
                     message: {
