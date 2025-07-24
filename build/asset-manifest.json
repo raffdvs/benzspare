@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5a5d0db0.css",
+    "main.js": "/static/js/main.aff20c00.js",
+    "static/js/488.69e60d4c.chunk.js": "/static/js/488.69e60d4c.chunk.js",
+    "static/media/BalooBhaijaan2.ttf": "/static/media/BalooBhaijaan2.04e43c82554438d5718c.ttf",
+    "index.html": "/index.html",
+    "main.5a5d0db0.css.map": "/static/css/main.5a5d0db0.css.map",
+    "main.aff20c00.js.map": "/static/js/main.aff20c00.js.map",
+    "488.69e60d4c.chunk.js.map": "/static/js/488.69e60d4c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5a5d0db0.css",
+    "static/js/main.aff20c00.js"
+  ]
+}
