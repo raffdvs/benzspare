@@ -1,6 +1,6 @@
 //#region Server Setup
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
@@ -496,19 +496,19 @@ app.get('/api/response', (req, res) => {
                 return res.status(401).json({ status: false, message: 'Invalid token' });
             }
 
-            const getMenusdetails = `
-SELECT 
-    m.id,
-    m.id_user,
-    m.name,
-    m.no,
-    m.date
-FROM 
-    menus m
-WHERE 
-    m.id_user = ?
-ORDER BY 
-    m.date DESC;
+            const getMenusdetails = /* sql */ `
+            SELECT 
+                m.id,
+                m.id_user,
+                m.name,
+                m.no,
+                m.date
+            FROM 
+                menus m
+            WHERE 
+                m.id_user = ?
+            ORDER BY 
+                m.date DESC;
         `;
 
             db.query(getMenusdetails, [user.id], (err, details) => {
@@ -569,42 +569,35 @@ ORDER BY
                 return res.status(401).json({ status: false, message: 'Invalid token' });
             }
 
-            const getBasketProductsSql = `
-            SELECT 
-    b.id AS basket_id,
-    b.product_id,
-    b.quantity AS basket_quantity,
-    b.date AS basket_date,
-
-    p.id AS product_id,
-    p.title,
-    p.image,
-    p.price,
-    p.quantity AS stock,
-    p.mark,
-    p.model,
-    p.type_id AS product_type_id,
-
-    t.type AS type_name,
-
-    s.id AS section_id,
-    s.name AS section_name
-
+            const sql = /* sql */ `
+SELECT 
+  b.id AS basket_id, 
+  b.product_id, 
+  b.quantity AS basket_quantity, 
+  b.date AS basket_date, 
+  p.id AS product_id, 
+  p.title, 
+  p.image, 
+  p.price, 
+  p.quantity AS stock, 
+  p.mark, 
+  p.model, 
+  p.type_id AS product_type_id, 
+  t.type AS type_name, 
+  s.id AS section_id, 
+  s.name AS section_name 
 FROM 
-    basket b
-INNER JOIN 
-    products p ON b.product_id = p.id
-LEFT JOIN 
-    types t ON p.type_id = t.id
-LEFT JOIN 
-    sections s ON t.id_section = s.id
+  basket b 
+  INNER JOIN products p ON b.product_id = p.id 
+  LEFT JOIN types t ON p.type_id = t.id 
+  LEFT JOIN sections s ON t.id_section = s.id 
 WHERE 
-    b.user_id = ?
+  b.user_id = ? 
 ORDER BY 
-    b.id DESC;
+  b.id DESC;
         `;
 
-            db.query(getBasketProductsSql, [user.id], (err, basketProducts) => {
+            db.query(sql, [user.id], (err, basketProducts) => {
                 if (err) return res.status(500).send(err);
                 if (!basketProducts?.length) {
                     return res.json({ status: false, message: 'No products in basket' });
@@ -822,35 +815,56 @@ app.post('/api/post', (req, res) => {
     }
 
 
-    if (body.type == 'basket.add.product') {
+    if (body.type === 'basket.add.product') {
         console.log(body);
-        const sql = 'SELECT id,uiv,email FROM users WHERE client_id = ? AND utoken = ? AND ukey = ?';
-        db.query(sql, [body.verify.client_id, body.verify.at, body.verify.ky], (err, v) => {
-            if (err) {
-                return res.status(500).send(err);
+
+        const getUserSql = `
+        SELECT 
+            id, uiv, email 
+        FROM 
+            users 
+        WHERE 
+            client_id = ? AND utoken = ? AND ukey = ?
+    `;
+
+        db.query(getUserSql, [body.verify.client_id, body.verify.at, body.verify.ky], (err, result) => {
+            if (err) return res.status(500).send(err);
+            if (!result?.length) return res.status(404).json({ status: false, message: 'User not found' });
+
+            const user = result[0];
+
+            let decryptedEmail;
+            try {
+                const t = Buffer.from(body.verify.at, 'hex');
+                const i = Buffer.from(user.uiv, 'hex');
+                const k = Buffer.from(body.verify.ky, 'hex');
+                decryptedEmail = decryptText(t, i, k);
+            } catch (error) {
+                return res.status(400).json({ status: false, message: 'Decryption failed' });
             }
-            const t = Buffer.from(body.verify.at, 'hex'); const i = Buffer.from(v[0].uiv, 'hex'); const k = Buffer.from(body.verify.ky, 'hex');
-            const r = decryptText(t, i, k);
 
-            if (v[0].email === r) {
-                if (body.data.title && body.data.product_id) {
-                    const sql = 'INSERT INTO basket (user_id,product_id,quantity) VALUES (?,?,?)';
-                    db.query(sql, [v[0].id, body.data.product_id, 1], (err) => {
-                        if (err) {
-                            return res.status(500).send(err);
-                        }
-                        return res.json({ status: true, message: 'True' })
-
-                    });
-                } else {
-                    return res.json({ status: true, message: { code: '303' } })
-                }
-
-            } else {
-                return res.json({ status: true, message: { code: '304' } })
+            if (user.email !== decryptedEmail) {
+                return res.json({ status: true, message: { code: '304' } });
             }
+
+            if (!body.data?.product_id) {
+                return res.json({ status: true, message: { code: '303' } });
+            }
+
+            const insertProductSql = `
+            INSERT INTO 
+                basket (user_id, product_id, quantity) 
+            VALUES 
+                (?, ?, ?)
+        `;
+
+            db.query(insertProductSql, [user.id, body.data.product_id, 2], (err) => {
+                if (err) return res.status(500).send(err);
+                return res.json({ status: true, message: 'True' });
+            });
         });
     }
+
 
     if (body.type == 'control.create.product') {
         const sql = 'SELECT id,uiv,email FROM users WHERE utoken = ? AND ukey = ?';

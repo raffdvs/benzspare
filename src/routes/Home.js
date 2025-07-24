@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState, useContext } from 'react';
+import { motion } from 'framer-motion';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -33,7 +34,7 @@ export default function Home() {
     };
 
     useEffect(() => {
-        document.title = `${process.env.REACT_APP_NAME} | قطع غيار السيارات`;
+        document.title = `${process.env.REACT_APP_NAME}`;
 
         const carousel = document.querySelector('.layoutDisplay-products');
         const productClickers = document.querySelectorAll('.product-title');
@@ -176,11 +177,10 @@ export default function Home() {
 
     return <div>
         {headerApp()}
-        <div className="list">
-
-            <div className=' p-0 m-0'>
+        <div className="h-[calc(100vh-64px)] overflow-y-auto hide-scrollbar snap-y snap-mandatory">
+            <div className='h-[calc(100vh-64px)] flex items-center justify-center p-0 m-0 snap-start'>
                 <div>
-                    <div className='flex h-screen justify-center'>
+                    <section className='flex justify-center'>
                         <div className='w-[calc(100%-16px)] h-[calc(100%-52px)] flex items-center justify-center rounded-xl ' >
                             <div className='space-y-12'>
                                 <div className='grid w-full items-center text-center justify-center space-y-6'>
@@ -214,7 +214,7 @@ export default function Home() {
                                                 <Link to={`/product/asd`} className='preventDefault group rounded-3xl'>
                                                     <div class="absolute transition duration-100 h-[168px] min-w-[168px] left-0 top-0 inset-0 rounded-3xl group-hover:blur-sm opacity-70 -z-10 bg-gradient-to-t from-pri to-pri"></div>
 
-                                                    <img src={`/img/${section.img}.jpg`} className=' h-[168px] min-w-[168px] rounded-3xl transition all duration-100 shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_2px_rgba(204,0,35,1)]'></img>
+                                                    <img src={`/img/${section.img}.jpg`} className=' h-[168px] min-w-[168px] rounded-3xl shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_2px_rgba(204,0,35,1)]'></img>
                                                 </Link>
                                             </div>
                                             <div className='flex items-center justify-between'>
@@ -227,56 +227,74 @@ export default function Home() {
                             </div>
                         </div>
 
-                    </div>
-                </div>
-            </div>
+                        {false && (
+                            <div className='flex items-center justify-center z-[99999] fixed top-0 left-0 w-full h-full bg-sec/40 backdrop-blur-sm'>
+                                <motion.div
+                                    initial={{ bottom: -25, opacity: 0, scale: 0.9 }}
+                                    animate={{ bottom: 0, opacity: 1, scale: 1 }}
+                                    exit={{ bottom: -25 }}        // عند الإخفاء
+                                    transition={{ duration: 0.1 }}
+                                    className='relative min-w-[580px] h-[calc(100vh-64px)] bg-white rounded-3xl shadow-2xl'>
+                                    <div className='flex items-center w-full h-[60px] px-5'>
+                                        <span className='text-base font-semibold text-pri'>اجزاء محرك</span>
+                                    </div>
+                                    <div className='w-full h-[1px] bg-sec08'></div>
+                                    <div className='relative w-full h-[calc(100%-60px)] overflow-y-auto'></div>
+                                    {/* */}
+                                </motion.div>
+                            </div>
+                        )}
 
-            <div className='layoutHome-bestSelling py-3'>
-                <div className='flex'>
-                    <Link to={'/shop'} className='text-xl mx-5 font-semibold text-sec flex items-center text-nowrap flex space-x-1 space-x-reverse'><span>الأكثر مبيعاً لدينا</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 16 16" class="fill-sec"><rect class="transparent" width="16" height="16"></rect><path d="M12.24,14.05c0.45,0.45,0.45,1.17,0,1.62C12.01,15.89,11.72,16,11.43,16c-0.29,0-0.58-0.11-0.81-0.33L3.76,8.81
+                    </section>
+                </div>
+            </div >
+            <section className='h-[calc(100vh-64px)] flex items-center justify-center snap-start'>
+                <div>
+                    <div className='flex'>
+                        <Link to={'/shop'} className='text-xl mx-5 font-semibold text-sec flex items-center text-nowrap flex space-x-1 space-x-reverse'><span>الأكثر مبيعاً لدينا</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 16 16" class="fill-sec"><rect class="transparent" width="16" height="16"></rect><path d="M12.24,14.05c0.45,0.45,0.45,1.17,0,1.62C12.01,15.89,11.72,16,11.43,16c-0.29,0-0.58-0.11-0.81-0.33L3.76,8.81
  c-0.45-0.45-0.45-1.17,0-1.62l6.86-6.86c0.45-0.45,1.17-0.45,1.62,0c0.45,0.45,0.45,1.17,0,1.62L6.19,8L12.24,14.05z"></path></svg>
 
-                    </Link>
-                </div>
-                <div className={`layoutDisplay`}>
-                    <div className='layoutDisplay-products'>
-                        {services.map((service) => (
-                            <div className='p-2'>
-                                <div className='flwd space-y-2'>
-                                    <div className='flex fwid h-center'>
-                                        <div className='relative h-[168px] min-w-[168px] group'>
-                                            <Link to={`/product/${service.title}`} className='preventDefault group rounded-3xl'>
-                                                <div class="absolute transition duration-100 h-[168px] min-w-[168px] left-0 top-0 inset-0 rounded-3xl group-hover:blur-sm opacity-70 -z-10 bg-gradient-to-t from-pri to-pri"></div>
+                        </Link>
+                    </div>
+                    <div className={`layoutDisplay`}>
+                        <div className='relative w-screen layoutDisplay-products'>
+                            {services.map((service) => (
+                                <div className='p-2'>
+                                    <div className='flwd space-y-2'>
+                                        <div className='flex fwid h-center'>
+                                            <div className='relative h-[168px] min-w-[168px] group'>
+                                                <Link to={`/product/${service.title}`} className='preventDefault group rounded-3xl'>
+                                                    <div class="absolute transition duration-100 h-[168px] min-w-[168px] left-0 top-0 inset-0 rounded-3xl group-hover:blur-sm opacity-70 -z-10 bg-gradient-to-t from-pri to-pri"></div>
 
-                                                <img src={`/img/${service.image}.jpg`} className=' h-[168px] min-w-[168px] rounded-3xl transition all duration-100 shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_2px_rgba(204,0,35,1)]'></img>
-                                            </Link>
+                                                    <img src={`/img/${service.image}.jpg`} className=' h-[168px] min-w-[168px] rounded-3xl transition all duration-100 shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_2px_rgba(204,0,35,1)]'></img>
+                                                </Link>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className='product-disc space-y-1'>
-                                        <div className='flex'>
-                                            <div className='text-sec text-sm font-semibold'>{service.title}</div>
-                                        </div>
-                                        <div className='flex'>
-                                            <div className='text-pri text-xs font-semibold space-x-1 space-x-reverse'><span>{service.section_name}</span><span className='text-[8px] text-sec/70'>•</span><span>{service.type_name}</span></div>
-                                        </div>
-                                        <div className='flex'>
-                                            <div>
-                                                <div className='LayoutProduct-rating flex items-center space-x-1'>
-                                                    <div className='flex items-center space-x-1 space-x-reverse'>
-                                                        <div className='text-xs'>{service.total_ratings ? (service.average_rating) : ('0.0')} </div>
-                                                        <div className='relative top-[-2px]'>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" viewBox="0 0 18 18" className={service.total_ratings ? (service.average_rating > 0.99 ? ('icon-ratingAct fill-sec') : ('icon-rating fill-sec/50')) : ('icon-rating')}>
-                                                                <rect className="transparent" width="18" height="18" />
-                                                                <path d="M10.2,2.2l1.02,3.15c0.17,0.52,0.65,0.87,1.2,0.87h3.31c1.22,0,1.73,1.57,0.74,2.28l-2.68,1.95
+                                        <div className='product-disc space-y-1'>
+                                            <div className='flex'>
+                                                <div className='text-sec text-sm font-semibold'>{service.title}</div>
+                                            </div>
+                                            <div className='flex'>
+                                                <div className='text-pri text-xs font-semibold space-x-1 space-x-reverse'><span>{service.section_name}</span><span className='text-sec'>/</span><span>{service.type_name}</span></div>
+                                            </div>
+                                            <div className='flex'>
+                                                <div>
+                                                    <div className='LayoutProduct-rating flex items-center space-x-1'>
+                                                        <div className='flex items-center space-x-1 space-x-reverse'>
+                                                            <div className='text-xs'>{service.total_ratings ? (service.average_rating) : ('0.0')} </div>
+                                                            <div className='relative top-[-2px]'>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" viewBox="0 0 18 18" className={service.total_ratings ? (service.average_rating > 0.99 ? ('icon-ratingAct fill-sec') : ('icon-rating fill-sec/50')) : ('icon-rating')}>
+                                                                    <rect className="transparent" width="18" height="18" />
+                                                                    <path d="M10.2,2.2l1.02,3.15c0.17,0.52,0.65,0.87,1.2,0.87h3.31c1.22,0,1.73,1.57,0.74,2.28l-2.68,1.95
 	c-0.44,0.32-0.63,0.89-0.46,1.41l1.02,3.15c0.38,1.16-0.95,2.13-1.94,1.41l-2.68-1.95c-0.44-0.32-1.04-0.32-1.48,0l-2.68,1.95
 	c-0.99,0.72-2.32-0.25-1.94-1.41l1.02-3.15c0.17-0.52-0.02-1.09-0.46-1.41L1.52,8.51C0.53,7.79,1.04,6.22,2.27,6.22h3.31
 	c0.55,0,1.03-0.35,1.2-0.87L7.8,2.2C8.18,1.04,9.82,1.04,10.2,2.2z"/>
-                                                            </svg>
-                                                        </div>
+                                                                </svg>
+                                                            </div>
 
-                                                        {/* <div className='absolute mx-6 top-[3px]'>
+                                                            {/* <div className='absolute mx-6 top-[3px]'>
 
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="6px" height="6px" viewBox="0 0 18 18" className={service.total_ratings ? (service.average_rating > 1.99 ? ('icon-ratingAct') : ('icon-rating')) : ('icon-rating')}>
                                                                 <rect className="transparent" width="18" height="18" />
@@ -316,29 +334,30 @@ export default function Home() {
 	c0.55,0,1.03-0.35,1.2-0.87L7.8,2.2C8.18,1.04,9.82,1.04,10.2,2.2z"/>
                                                             </svg>
                                                         </div> */}
-                                                    </div>
-                                                    <span className='text-sec/50 text-xs'>•</span>
-                                                    <div className='flex'>
-                                                        <div className='font-normal text-sec text-xs'>{formatNumber(service.price)} ج.م
+                                                        </div>
+                                                        <span className='text-sec/50 text-xs'>•</span>
+                                                        <div className='flex'>
+                                                            <div className='font-normal text-sec text-xs'>{formatNumber(service.price)} ج.م
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                {/* 
+                                    {/* 
                             <div className='dspace-10'></div>
 
                             <div className='flex'>
                                 <button onClick='' className='product-buy'>شراء الآن</button>
                             </div> */}
-                            </div>
-                        ))}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section >
 
             {/* <div className='layoutHome-bestSelling'>
                 <div className='text-2xl mx-5 font-normal text-sec'>الماركات الحالية لدينا</div>
@@ -363,7 +382,7 @@ export default function Home() {
                     </div>
                 </div>
             </div> */}
+            {footerApp()}
         </div>
-        {footerApp()}
     </div>
 }

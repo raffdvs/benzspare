@@ -285,13 +285,25 @@ export default function HeaderApp() {
     };
 
     const toggleMenuAccount = () => {
-        if (!showMenuAccount) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-            resetSelectionOnClose();
-        }
+        setMenuAccount((status) => (status === false ? true : false));
+    };
 
+    function deleteCookie(name) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    }
+
+
+    const [showAccountLogout, setAccountLogout] = useState(false);
+    const [showNotification, setShowNotification] = useState(true);
+
+    const [showMessages, setShowMessage] = useState(false);
+
+
+    const AccountLogout = () => {
+        setAccountLogout((status) => (status === false ? true : false));
+    };
+
+    const ShwMessages = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/api/inbox?client_id=${getCookie('client_id')}&at=${getCookie('at')}&ky=${getCookie('ky')} `)
             .then((response) => {
                 setNotification(response.data.message);
@@ -305,7 +317,6 @@ export default function HeaderApp() {
             .catch((error) => {
                 console.error('Error fetching inbox:', error);
             });
-        setMenuAccount((status) => (status === false ? true : false));
         Notification.requestPermission().then((permission) => {
             if (permission === "granted") {
                 setShowNotification((status) => (status === false ? true : false));
@@ -347,24 +358,6 @@ export default function HeaderApp() {
                 })();
             }
         });
-    };
-
-    function deleteCookie(name) {
-        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-    }
-
-
-    const [showAccountLogout, setAccountLogout] = useState(false);
-    const [showNotification, setShowNotification] = useState(true);
-
-    const [showMessages, setShowMessage] = useState(false);
-
-
-    const AccountLogout = () => {
-        setAccountLogout((status) => (status === false ? true : false));
-    };
-
-    const ShwMessages = () => {
         setShowMessage((status) => (status === false ? true : false));
     };
 
@@ -496,6 +489,7 @@ export default function HeaderApp() {
     return (
         <div className='header'>
             <div className='absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-white/90 backdrop-blur-xl'></div>
+            <div className='absolute bottom-0 left-0 right-0 w-full h-[2px] bg-sec08'></div>
             <div className={`relative flex justify-between items-center pointer-events-auto py-[16px] px-[32px] `}>
                 <div className='flex space-x-3 space-x-reverse'>
                     <Link to='/' className='group logo h-[32px] min-w-[32px]'>
@@ -544,7 +538,7 @@ export default function HeaderApp() {
                         </svg>
                     </Link>
 
-                    <button onClick={toggleSearch} className='group flex items-center justify-center w-[32px] h-[32px] rounded-full transition duration-100 bg-sec/15 hover:bg-sec/10'>
+                    <button onClick={toggleSearch} className='group flex items-center justify-center w-[32px] h-[32px] rounded-xl transition duration-100 bg-sec/15 hover:bg-sec/10'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 20 20" className="fill-transparent">
                             <rect class="fill-transparent" width="20" height="20" />
 
@@ -659,23 +653,19 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                 </div>
                 <div className='flex'>
                     {!getCookie('at') ? (
-                        <div>
-                            <a href='/login' className='icon cans-head'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 20 20">
-                                    <path className="icon-head" d="M19,10c0,1.64-0.44,3.18-1.2,4.5c-0.59,1.02-1.37,1.91-2.3,2.63c-0.33,0.25-0.68,0.48-1.04,0.69
-	C13.14,18.57,11.62,19,10,19c-0.2,0-0.4-0.01-0.6-0.02c-1.39-0.09-2.71-0.5-3.85-1.16c-0.36-0.21-0.71-0.44-1.04-0.69
-	c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,19,5.03,19,10z M10,5.07
-	c-1.63,0-2.96,1.32-2.96,2.96s1.32,2.96,2.96,2.96s2.96-1.32,2.96-2.96S11.63,5.07,10,5.07z M10,14.26c-2.08,0-3.86,1.34-4.48,3.21
-	c0.27,0.21,0.55,0.39,0.84,0.56c0.94,0.54,2.01,0.88,3.14,0.95C9.67,19,9.84,19,10,19c1.32,0,2.57-0.35,3.64-0.96
-	c0.29-0.17,0.58-0.36,0.84-0.56C13.85,15.6,12.08,14.26,10,14.26z"/>
-                                </svg>
-                            </a>
+                        <div className='relative flex items-center space-x-2 space-x-reverse'>
+                            <Link to={`/oauth/login`} className='flex items-center  px-4 h-[32px] hover:underline'>
+                                <span className='text-sm text-sec font-semibold'>الدخول</span>
+                            </Link>
+                            <Link to={`/oauth/register`} className='flex items-center  px-4 h-[32px] rounded-xl bg-pri hover:bg-pri/80'>
+                                <span className='text-sm text-white font-semibold'>حساب عميل جديد</span>
+                            </Link>
                         </div>
 
                     ) : (
                         <div className='flex space-x-4 space-x-reverse'>
 
-                            <button onClick={ShwMessages} className='group flex items-center justify-center w-[32px] h-[32px] rounded-full transition duration-100 bg-sec/15 hover:bg-sec/10'>
+                            <button onClick={ShwMessages} className='group flex items-center justify-center w-[32px] h-[32px] rounded-xl transition duration-100 bg-sec/15 hover:bg-sec/10'>
                                 {/* <div className='basket-quantity'>
 						<div className='basket-number'>
 							0
@@ -692,7 +682,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
 
                             {showMessages && (
 
-                                <div className='absolute left-5 top-10 w-[360px] h-[580px] bg-white rounded-2xl shadow-[0_0_0_1px_inset_rgba(2,0,3,.1),0_8px_24px_rgba(2,0,3,.1)]'>
+                                <div className={`absolute left-5 top-12 w-[360px] h-[580px] bg-white rounded-2xl shadow-md after:content-[''] after:pointer-events-none after:absolute after:left-0 after:top-0 after:w-full after:h-full after:rounded-xl after:shadow-[0_0_0_1px_rgba(2,0,3,.08)]`}>
                                     <div className='flex items-center px-4 h-[52px]'>
                                         <div className='icon-pin-20'>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" className="fill-transparent stroke-[1.5px] stroke-sec group-hover:stroke-sec/70">
@@ -901,7 +891,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                             )}
 
 
-                            <button onClick={toggleBasket} className='group flex items-center justify-center w-[32px] h-[32px] rounded-full transition duration-100 bg-sec/15 hover:bg-sec/10'>
+                            <button onClick={toggleBasket} className='group flex items-center justify-center w-[32px] h-[32px] rounded-xl transition duration-100 bg-sec/15 hover:bg-sec/10'>
                                 {/* <div className='basket-quantity'>
 						<div className='basket-number'>
 							0
@@ -942,9 +932,8 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                     )
                                                 }
                                                 <div className='uspace-10'></div>
-                                                <button onClick={closeBasket} className='icon cans-head'>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 16 16" className='icon'>
-                                                        <rect className='transparent' width="16" height="16" />
+                                                <button onClick={closeBasket} className='group flex items-center justify-center min-w-[32px] h-[32px] rounded-xl transition duration-100 bg-sec/15 hover:bg-sec/10'>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 16 16" className='fill-sec group-hover:fill-sec/70'>
                                                         <path d="M12.95,14.36L8,9.41l-4.95,4.95l-1.41-1.41L6.59,8L1.64,3.05l1.41-1.41L8,6.59l4.95-4.95l1.41,1.41L9.41,8
 	l4.95,4.95L12.95,14.36z"/>
                                                     </svg>
@@ -953,10 +942,6 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                     </div>
                                                 </button>
                                             </div>
-                                            <div className='w-full h-[1px] bg-sec/10'></div>
-
-
-
                                             <div className={`relative  h-[calc(100%-148px)] overflow-hidden ${baskets.length !== 0 && 'active'}`}>
                                                 <div className='absolute flex justify-center items-center top-3 left-0 p-2 pt-0 w-full'>
                                                     <div className={`flex items-center h-[48px] px-3 bg-sec/40 backdrop-blur-md rounded-2xl ${Object.values(selectedProducts).some(value => value === true) ? 'block' : 'hidden'} ${baskets.length !== 0 && 'active'}`}>
@@ -987,7 +972,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                     <div className='flex'>
                                                                         <div className='flex'>
                                                                             <Link className=' group' to={`/product/${basket.title}`} onClick={() => { document.body.style.overflow = 'auto' }}>
-                                                                                <img src={`/img/${basket.image}.jpg`} className='transition duration-100 rounded-xl h-[56px] min-w-[56px] shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_4px_rgba(2,0,3,0.1)]' tabindex={-1} />
+                                                                                <img src={`/img/${basket.image}.jpg`} className='transition duration-100 rounded-xl h-[56px] min-w-[56px] shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_2px_rgba(204,0,35,1)]' tabindex={-1} />
                                                                             </Link>
                                                                         </div>
                                                                         <div className='space-20'></div>
@@ -1208,7 +1193,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                 </div>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>رقم الهاتف</span>
-                                                                                    <span className='text-xs text-pri font-semibold' dir="ltr">+20 11 16744379</span>
+                                                                                    <span className='text-xs text-pri font-semibold' dir="ltr">_</span>
                                                                                 </div>
                                                                             </div>
                                                                             <div className='w-full h-[1px] bg-sec/10'></div>
@@ -1329,7 +1314,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                 <div className='absolute bottom-0 left-0 h-[60px] px-3 flex items-center justify-between'>
                                                                     <div className='flex items-center justify-between'>
                                                                         <div className='flex space-x-2 space-x-reverse'>
-                                                                            <button onClick={() => { processBuyBasket(); document.body.style.overflow = 'auto' }} className='px-4 h-[32px] transition duration-100 shadow-[0_0_0_1px_inset_rgba(2,0,3,.2),0_0_0_1px_transparent] hover:shadow-[0_0_0_1px_inset_rgba(2,0,3,1),0_0_0_1px_transparent] rounded-full'><span className='text-sec text-xs font-semibold'>إلغاء</span></button>
+                                                                            <button onClick={() => { processBuyBasket(); document.body.style.overflow = 'auto' }} className='px-4 h-[32px] hover:underline rounded-full'><span className='text-sec text-xs font-semibold'>إلغاء</span></button>
                                                                             <button className='px-4 h-[32px] transition duration-100 bg-sec hover:bg-sec/80 rounded-full'><span className='text-white text-xs font-semibold'>تأكيد الشراء</span></button>
                                                                         </div>
                                                                     </div>

@@ -263,9 +263,9 @@ export default function Shop() {
     return <div>
         {headerApp()}
 
-        <div className='p-2'>
+        <div className='h-[calc(100vh-64px)] overflow-y-auto hide-scrollbar snap-y snap-mandatory h-[calc(100vh-64px)]'>
 
-            <div className='list-section'>
+            <div className='h-[calc(100vh-64px)] snap-start flex items-center justify-center'>
                 {/* <div className='sm-fwdh'>
                     <div className='search-quickly'>
                         <div className='sm-text'>الفرز السريع</div>
@@ -303,7 +303,7 @@ export default function Shop() {
                     </div>
                 </div>
                 <div className='space-20'></div> */}
-                <div className='list-products'>
+                <div className='list-products  p-8'>
                     <div className='flex items-center justify-between w-full h-[48px] px-2'>
                         <div>
                             <button className='btn-filter flex relative space-x-2 space-x-reverse' onClick={toggleFilter}>
@@ -326,20 +326,6 @@ export default function Shop() {
                             <div className='space-10'></div>
 
                             <div className={`status-filter${state ? ' actived' : ''}`} >{state ? 'مفعل' : 'غير مفعل'}</div> */}
-                            </button>
-                        </div>
-
-                        <div>
-                            <button className='icon cans selected' title='فرز جانبي' disabled>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" className='icon'>
-                                    <path d="M6,8H3C1.9,8,1,7.1,1,6V3c0-1.1,0.9-2,2-2h3c1.1,0,2,0.9,2,2v3C8,7.1,7.1,8,6,8z M6,12H3c-1.1,0-2,0.9-2,2v3
-	c0,1.1,0.9,2,2,2h3c1.1,0,2-0.9,2-2v-3C8,12.9,7.1,12,6,12z M17,12h-3c-1.1,0-2,0.9-2,2v3c0,1.1,0.9,2,2,2h3c1.1,0,2-0.9,2-2v-3
-	C19,12.9,18.1,12,17,12z M17,1h-3c-1.1,0-2,0.9-2,2v3c0,1.1,0.9,2,2,2h3c1.1,0,2-0.9,2-2V3C19,1.9,18.1,1,17,1z"/>
-
-
-                                </svg>
-
-
                             </button>
                         </div>
                     </div>
@@ -759,9 +745,9 @@ L2.82,11.29z M7.82,13.37V9.22l3.59,2.07l0,0L7.82,13.37z"/>
 
                 </div>
             </div>
-        </div>
+            {footerApp()}
 
-        {footerApp()}
+        </div>
 
     </div>;
 }

@@ -44,8 +44,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/join" element={<Join />} />
-          <Route path="/login" element={<Auth_Login />} />
+          <Route path="/oauth/register" element={<Join />} />
+          <Route path="/oauth/login" element={<Auth_Login />} />
           <Route path="/product/:name_product" element={<Product />} />
           <Route path="/saves" element={<Saves />} />
           <Route path="/orders" element={<Orders />} />
