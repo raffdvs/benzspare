@@ -200,6 +200,7 @@ export default function HeaderApp() {
         axios.get(`${process.env.REACT_APP_API_URL}/api/response?type=menus.details&client_id=${getCookie('client_id')}&at=${getCookie('at')}&ky=${getCookie('ky')} `)
             .then((response) => {
                 setContextMenu(response.data.message.menus);
+                console.log(contextMenu);
             })
             .catch((error) => {
                 console.error('Error fetching inbox:', error);
@@ -489,7 +490,7 @@ export default function HeaderApp() {
     return (
         <div className='header'>
             <div className='absolute top-0 left-0 right-0 bottom-0 w-full h-full bg-white/90 backdrop-blur-xl'></div>
-            <div className='absolute bottom-0 left-0 right-0 w-full h-[2px] bg-sec08'></div>
+            <div className='absolute bottom-0 left-0 right-0 w-full h-[1px] bg-sec08'></div>
             <div className={`relative flex justify-between items-center pointer-events-auto py-[16px] px-[32px] `}>
                 <div className='flex space-x-3 space-x-reverse'>
                     <Link to='/' className='group logo h-[32px] min-w-[32px]'>
@@ -538,7 +539,7 @@ export default function HeaderApp() {
                         </svg>
                     </Link>
 
-                    <button onClick={toggleSearch} className='group flex items-center justify-center w-[32px] h-[32px] rounded-xl transition duration-100 bg-sec/15 hover:bg-sec/10'>
+                    <button onClick={toggleSearch} className='group flex items-center justify-center w-[32px] h-[32px] rounded-xl transition duration-100 bg-sec/10 hover:bg-sec08'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 20 20" className="fill-transparent">
                             <rect class="fill-transparent" width="20" height="20" />
 
@@ -557,23 +558,27 @@ export default function HeaderApp() {
                         </div>
                     </button>
                     {showSearch && (
-                        <div className={`backdrop ${showSearch === false ? ' hide' : ' show'}`}>
-                            <div className='searchList min-w-[480px]'>
-                                <div className='searchbox'>
-                                    <div className='space-10'></div>
-                                    <div className='icon-pin-20'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20">
-                                            <path className="icon-head" d="M19,10c0,1.64-0.44,3.18-1.2,4.5c-0.59,1.02-1.37,1.91-2.3,2.63c-0.33,0.25-0.68,0.48-1.04,0.69
-C13.14,18.57,11.62,19,10,19c-0.2,0-0.4-0.01-0.6-0.02c-1.39-0.09-2.71-0.5-3.85-1.16c-0.36-0.21-0.71-0.44-1.04-0.69
-c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,19,5.03,19,10z M16.36,16.36L19,19"/>
+                        <div className={`fixed flex items-center justify-center top-0 left-0 w-full h-full bg-sec/10 backdrop-blur-sm ${showSearch === false ? ' hide' : ' show'}`}>
+                            <motion.div
+
+
+                                initial={{ bottom: -25, opacity: 0, scale: 0.9 }}
+                                animate={{ bottom: 0, opacity: 1, scale: 1 }}
+                                exit={{ bottom: -25 }}
+                                transition={{ duration: 0.1 }}
+                                className='min-h-[52px] min-w-[480px] bg-white rounded-2xl shadow-xl'>
+                                <div className='flex items-center h-[52px] px-3 space-x-2 space-x-reverse'>
+                                    <button type='button' onClick={toggleSearch} className='flex items-center justify-center min-w-[32px] h-[32px] hover:bg-sec/10 rounded-xl'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 20 20" className="fill-transparent">
+                                            <path className='stroke-[2px] stroke-sec/70' d="M15.31,8c0,3.87-3.13,7-7,7s-7-3.13-7-7s3.13-7,7-7S15.31,4.13,15.31,8z M12.94,13.25L18.69,19" />
+
                                         </svg>
-                                    </div>
-                                    <div className='space-5'></div>
+                                        <div className='tooltip'>
+                                            البحث
+                                        </div>
+                                    </button>
                                     <input className='inp-search' onChange={searchChange} placeholder='بحث عن...' value={searchTerm} autoFocus={showSearch && true}></input>
-                                    <div className='space-10'></div>
-                                    <div className='solid-v-2'></div>
-                                    <div className='space-10'></div>
-                                    <button type='button' onClick={toggleSearch} className='icon cans-head icon-pin-20'>
+                                    <button type='button' onClick={toggleSearch} className='flex items-center justify-center min-w-[32px] h-[32px] hover:bg-sec/10 rounded-xl '>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 16 16" className='icon'>
                                             <rect className='transparent' width="16" height="16" />
                                             <path d="M12.95,14.36L8,9.41l-4.95,4.95l-1.41-1.41L6.59,8L1.64,3.05l1.41-1.41L8,6.59l4.95-4.95l1.41,1.41L9.41,8
@@ -584,34 +589,8 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                         </div>
                                     </button>
                                 </div>
-                                <div className='solid-h-1'></div>
-                                <div className='search-board'>
-                                    <div className={`search-guide${searchEmpty === false ? ' hide' : ''}`}>
-                                        <div>
-                                            <div className='guide'>إختصارات سريعة</div>
-                                            <div className='dspace-20'></div>
-
-                                            <div className='guide-content'>
-                                                <div className='key-guide'>F2</div>
-                                                <div className='space-10'></div>
-                                                <div className='solid-v-2'></div>
-                                                <div className='space-10'></div>
-                                                <div className='text-guide'>إظهار أو إخفاء صندوق البحث</div>
-                                            </div>
-                                            <div className='dspace-10'></div>
-                                            <div className='solid-h-1'></div>
-                                            <div className='dspace-10'></div>
-                                            <div className='guide-content'>
-                                                <div className='key-guide'>TAB</div>
-                                                <div className='space-10'></div>
-                                                <div className='solid-v-2'></div>
-                                                <div className='space-10'></div>
-                                                <div className='text-guide'>تحديد عنصر من نتائج البحث</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className={`search-loading${searchLoader === false ? ' hide' : ' show'}`}><div className="loader"></div></div>
-                                    <div className={`search-results${searchResults === false ? ' show' : ' hide'}`}>
+                                {results.length > 0 && (
+                                    <div className='h-[380px] overflow-y-auto px-3'>
                                         {results.map((result) => (
                                             <Link to={`/product/${result.title}`} className='search-result'>
                                                 <div className='space-5'></div>
@@ -627,27 +606,9 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                 </div>
                                             </Link>
                                         ))}
-
-                                        <div className={`search-notFound${searchnotFound === false ? ' hide' : ' show'}`}>
-                                            <div className='flex'>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 20 20" className="icon">
-                                                    <rect class="transparent" width="20" height="20" />
-
-                                                    <path d="M18.82,20c-0.3,0-0.6-0.11-0.83-0.34l-1.8-1.8c-0.03,0.02-0.05,0.04-0.08,0.06c-0.36,0.28-0.75,0.53-1.15,0.76
-	c-1.69,0.96-3.63,1.39-5.55,1.3c-1.59-0.1-3.07-0.55-4.37-1.3c-0.41-0.24-0.79-0.49-1.14-0.76c-1.04-0.8-1.9-1.78-2.56-2.92
-	C0.46,13.49,0,11.76,0,10C0,4.49,4.49,0,10,0s10,4.49,10,10c0,1.75-0.46,3.48-1.33,5c-0.24,0.42-0.51,0.82-0.81,1.19l1.8,1.8
-	c0.46,0.46,0.46,1.2,0,1.66C19.43,19.89,19.12,20,18.82,20z M10,2.35c-4.22,0-7.65,3.43-7.65,7.65c0,1.35,0.36,2.67,1.03,3.83
-	c0.5,0.87,1.16,1.62,1.95,2.22c0.28,0.21,0.59,0.41,0.9,0.6c0.98,0.57,2.1,0.91,3.26,0.98c0.2,0.01,0.35,0.02,0.51,0.02
-	c1.33,0,2.64-0.35,3.79-1c0.3-0.18,0.6-0.38,0.89-0.59c0.22-0.17,0.43-0.35,0.63-0.54c0.03-0.04,0.06-0.07,0.1-0.11
-	s0.07-0.07,0.11-0.1c0.43-0.44,0.8-0.94,1.12-1.48c0.67-1.16,1.02-2.48,1.02-3.82C17.65,5.78,14.22,2.35,10,2.35z"/>
-                                                </svg>
-                                                <div className='space-10'></div>
-                                                <div className='searchnotFound-text'>لا يوجد ما يطابق بحثك</div>
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                )}
+                            </motion.div>
                         </div>
                     )}
                 </div>
@@ -665,7 +626,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                     ) : (
                         <div className='flex space-x-4 space-x-reverse'>
 
-                            <button onClick={ShwMessages} className='group flex items-center justify-center w-[32px] h-[32px] rounded-xl transition duration-100 bg-sec/15 hover:bg-sec/10'>
+                            <button onClick={ShwMessages} className='group flex items-center justify-center w-[32px] h-[32px] rounded-xl transition duration-100 bg-sec/10 hover:bg-sec08'>
                                 {/* <div className='basket-quantity'>
 						<div className='basket-number'>
 							0
@@ -779,7 +740,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                 </div>
                             )}
                             <button type='button' onClick={toggleMenuAccount} className='rounded-full transition'>
-                                <div className='bg-pri min-w-[32px] h-[32px] rounded-full text-white font-semibold text-xs flex justify-center items-center'>{data[0]}</div>
+                                <div className='bg-sec min-w-[32px] h-[32px] rounded-full text-white font-semibold text-xs flex justify-center items-center'>{data[0]}</div>
                             </button>
                             {showMenuAccount && (
                                 <div className={`absolute top-12 left-28 ${showMenuAccount === false && ' hidden'}`}>
@@ -891,7 +852,7 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                             )}
 
 
-                            <button onClick={toggleBasket} className='group flex items-center justify-center w-[32px] h-[32px] rounded-xl transition duration-100 bg-sec/15 hover:bg-sec/10'>
+                            <button onClick={toggleBasket} className='group flex items-center justify-center w-[32px] h-[32px] rounded-xl transition duration-100 bg-sec/10 hover:bg-sec08'>
                                 {/* <div className='basket-quantity'>
 						<div className='basket-number'>
 							0
@@ -964,78 +925,87 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                     </div>
                                                 </div>
                                                 <div className={`overscroll-contain overflow-y-auto  pt-0 h-[calc(100%)]`}>
-                                                    {basketsProducts.map((basket, i) => (
-                                                        <div>
-                                                            <div className={`basket-product select-none
+
+                                                    {
+                                                        basketsProducts.length ? basketsProducts.map((basket, i) => (
+                                                            <div>
+                                                                <div className={`basket-product select-none
  flex items-center p-4 rounded-2xl  transition duration-100 ${selectedProducts[i] && 'select'} `}>
-                                                                <div className='fwid'>
-                                                                    <div className='flex'>
+                                                                    <div className='fwid'>
                                                                         <div className='flex'>
-                                                                            <Link className=' group' to={`/product/${basket.title}`} onClick={() => { document.body.style.overflow = 'auto' }}>
-                                                                                <img src={`/img/${basket.image}.jpg`} className='transition duration-100 rounded-xl h-[56px] min-w-[56px] shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_2px_rgba(204,0,35,1)]' tabindex={-1} />
-                                                                            </Link>
-                                                                        </div>
-                                                                        <div className='space-20'></div>
-                                                                        <div className='basket-productTexts space-y-2'>
-                                                                            <div className='text-sec font-semibold text-sm'>{basket.title}</div>
                                                                             <div className='flex'>
-                                                                                <div className='text-pri text-xs font-semibold space-x-1 space-x-reverse'><span>{basket.section_name}</span><span className='text-[8px] text-sec/70'>•</span><span>{basket.type_name}</span></div>
-
+                                                                                <Link className=' group' to={`/product/${basket.title}`} onClick={() => { document.body.style.overflow = 'auto' }}>
+                                                                                    <img src={`/img/${basket.image}.jpg`} className='transition duration-100 rounded-xl h-[56px] min-w-[56px] shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_2px_rgba(204,0,35,1)]' tabindex={-1} />
+                                                                                </Link>
                                                                             </div>
-                                                                            <div className='text-sec text-xs font-normal'>{basket.price} ج.م</div>
-
-                                                                            <div className='flex items-center space-x-2 space-x-reverse'><span className='text-sec text-xs font-normal'>الكمية:</span><span className='text-sec text-xs font-semibold'>{quantitys[i] || 1}</span>
-
-                                                                                <div className='flex space-x-1 space-x-reverse'>
-                                                                                    <button type='button' className='flex items-center justify-center h-[24px] min-w-[24px] transition duration-100 bg-sec/10 hover:bg-sec/15 rounded-full' onClick={() => setQuantity(i, (quantitys[i] || 1) - 1)}>
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px" viewBox="0 0 16 16" className='fill-sec'>
-                                                                                            <rect className="transparent" width="16" height="16" />
-                                                                                            <g>
-                                                                                                <rect y="7" width="16" height="2" />
-                                                                                            </g>
-                                                                                        </svg>
-                                                                                        <div className='tooltip'>
-                                                                                            إنقاص
-                                                                                        </div>
-                                                                                    </button>
-
-                                                                                    <button type='button' className='flex items-center justify-center h-[24px] min-w-[24px] transition duration-100 shadow-[0_0_0_2px_rgba(2,0,3,.1)] hover:shadow-[0_0_0_2px_rgba(2,0,3,1)] rounded-full' onClick={() => { if (quantitys[i] === basket.quantity_in_basket || 1) { setQuantity(i, (quantitys[i] || 1) + 1); } }}>
-                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px" viewBox="0 0 16 16" className='fill-sec'>
-                                                                                            <rect className="transparent" width="16" height="16" />
-                                                                                            <g>
-                                                                                                <polygon points="16,7 9,7 9,0 7,0 7,7 0,7 0,9 7,9 7,16 9,16 9,9 16,9 " />
-                                                                                            </g>
-                                                                                        </svg>
-                                                                                        <div className='tooltip'>
-                                                                                            إضافة
-                                                                                        </div>
-                                                                                    </button>
+                                                                            <div className='space-20'></div>
+                                                                            <div className='basket-productTexts space-y-2'>
+                                                                                <div className='text-sec font-semibold text-sm'>{basket.title}</div>
+                                                                                <div className='flex'>
+                                                                                    <div className='text-sec text-xs font-normal space-x-1 space-x-reverse'><Link to={``} className='hover:text-pri hover:underline'>{basket.section_name}</Link><span className='text-sec'>›</span><Link to={``} className='hover:text-pri hover:underline'>{basket.type_name}</Link></div>
                                                                                 </div>
+                                                                                <div className='text-sec text-xs font-normal'>{basket.price} ج.م</div>
+
+                                                                                <div className='flex items-center space-x-2 space-x-reverse'><span className='text-sec text-xs font-normal'>الكمية:</span>
+
+                                                                                    <div className='flex items-center space-x-2 space-x-reverse shadow-[0_0_0_1px_rgba(2,0,3,.1)] rounded-xl h-[36px] px-2'>
+                                                                                        <button type='button' className='flex items-center justify-center h-[24px] min-w-[24px] bg-sec/10 hover:bg-sec/15 rounded-lg' onClick={() => setQuantity(i, (quantitys[i] || 1) - 1)}>
+                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px" viewBox="0 0 16 16" className='fill-sec'>
+                                                                                                <rect className="transparent" width="16" height="16" />
+                                                                                                <g>
+                                                                                                    <rect y="7" width="16" height="2" />
+                                                                                                </g>
+                                                                                            </svg>
+                                                                                            <div className='tooltip'>
+                                                                                                إنقاص
+                                                                                            </div>
+                                                                                        </button>
+                                                                                        <span className='text-sec text-xs font-semibold'>{quantitys[i] || 1}</span>
+                                                                                        <button type='button' className='flex items-center justify-center h-[24px] min-w-[24px] bg-sec/10 hover:bg-sec/15 rounded-lg' onClick={() => { if (quantitys[i] === basket.quantity_in_basket || 1) { setQuantity(i, (quantitys[i] || 1) + 1); } }}>
+                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="10px" height="10px" viewBox="0 0 16 16" className='fill-sec'>
+                                                                                                <rect className="transparent" width="16" height="16" />
+                                                                                                <g>
+                                                                                                    <polygon points="16,7 9,7 9,0 7,0 7,7 0,7 0,9 7,9 7,16 9,16 9,9 16,9 " />
+                                                                                                </g>
+                                                                                            </svg>
+                                                                                            <div className='tooltip'>
+                                                                                                إضافة
+                                                                                            </div>
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </div>
+                                                                                {selectedProducts[i] && (
+                                                                                    <div className='flex space-x-2 space-x-reverse'>
+                                                                                        <span className='text-sec text-xs font-normal'>الأجمالي:</span><span className='text-pri text-xs font-semibold'>  {((quantitys[i] || 1) * (basket.price || 0)).toFixed(2)} ج.م</span>
+                                                                                    </div>
+                                                                                )}
                                                                             </div>
-                                                                            {selectedProducts[i] && (
-                                                                                <div className='flex space-x-2 space-x-reverse'>
-                                                                                    <span className='text-sec text-xs font-normal'>الأجمالي:</span><span className='text-pri text-xs font-semibold'>  {((quantitys[i] || 1) * (basket.price || 0)).toFixed(2)} ج.م</span>
-                                                                                </div>
-                                                                            )}
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                <div className='checkLayout'>
+                                                                    <div className='checkLayout'>
 
-                                                                    <div value={i} className='checkLayout-box rounded-lg' onClick={() => selectProducts(i)}><svg width="16px" height="16px" viewBox="0 0 16 16">
-                                                                        <rect class="transparent" width="16px" height="16px" />
-                                                                        <line id="Line1" className='Line' x1="1" y1="8" x2="1" y2="8" />
-                                                                        <line id="Line2" className='Line' x1="5.67" y1="12.67" x2="5.67" y2="12.67" />
+                                                                        <div value={i} className='checkLayout-box rounded-lg' onClick={() => selectProducts(i)}><svg width="16px" height="16px" viewBox="0 0 16 16">
+                                                                            <rect class="transparent" width="16px" height="16px" />
+                                                                            <line id="Line1" className='Line' x1="1" y1="8" x2="1" y2="8" />
+                                                                            <line id="Line2" className='Line' x1="5.67" y1="12.67" x2="5.67" y2="12.67" />
 
-                                                                    </svg>
-                                                                        <div className='tooltip'>
-                                                                            تحديد
+                                                                        </svg>
+                                                                            <div className='tooltip'>
+                                                                                تحديد
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    ))}
+                                                        ))
+                                                            : (
+                                                                <div className='flex items-center justify-center h-full'>
+                                                                    <div className='flex items-center justify-center min-h-[52px]'>
+                                                                        <div class="spinner"></div>
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                    }
                                                 </div>
 
 
@@ -1156,11 +1126,11 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                 <span className='text-xs text-sec font-semibold'>التفاصيل</span>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>القائمة</span>
-                                                                                    <span className='text-xs text-pri font-semibold'>{menuSelection.name}</span>
+                                                                                    <span className='text-xs text-pri font-semibold'>{contextMenu[0].name}</span>
                                                                                 </div>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>رقم العملية</span>
-                                                                                    <span className='text-xs text-pri font-semibold'>1000245/2025</span>
+                                                                                    <span className='text-xs text-pri font-semibold'>{contextMenu[0].number_code}/{new Date(contextMenu[0].date).getFullYear()}</span>
                                                                                 </div>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>إجمالي المبلغ</span>
@@ -1180,8 +1150,8 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                     </span>
                                                                                 </div>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
-                                                                                    <span className='text-xs text-sec font-normal'>طريقة الدفع</span>
-                                                                                    <span className='text-xs text-pri font-semibold'>كاش</span>
+                                                                                    <span className='text-xs text-sec font-normal'></span>
+                                                                                    <span className='text-xs text-pri font-semibold'>{!contextMenu[0].type_pay ? 'كاش' : 'بطاقة إتئمانية'}</span>
                                                                                 </div>
                                                                             </div>
                                                                             <div className='w-full h-[1px] bg-sec/10'></div>
@@ -1189,11 +1159,11 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                 <span className='text-xs text-sec font-semibold'>المستلم</span>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>أسم المستلم</span>
-                                                                                    <span className='text-xs text-pri font-semibold'>علي محمد كاسبر</span>
+                                                                                    <span className='text-xs text-pri font-semibold'>{contextMenu[0].recipient_name}</span>
                                                                                 </div>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>رقم الهاتف</span>
-                                                                                    <span className='text-xs text-pri font-semibold' dir="ltr">_</span>
+                                                                                    <span className='text-xs text-pri font-semibold' dir="ltr">{contextMenu[0].phone}</span>
                                                                                 </div>
                                                                             </div>
                                                                             <div className='w-full h-[1px] bg-sec/10'></div>
@@ -1201,23 +1171,23 @@ c-0.93-0.71-1.71-1.6-2.3-2.62C1.44,13.18,1,11.64,1,10c0-4.97,4.03-9,9-9C14.97,1,
                                                                                 <span className='text-xs text-sec font-semibold'>التوصيل</span>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>العنوان</span>
-                                                                                    <span className='text-xs text-pri font-semibold'>الجيزة، ساقية مكي</span>
+                                                                                    <span className='text-xs text-pri font-semibold'>{contextMenu[0].address}</span>
                                                                                 </div>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>أسم الشارع</span>
-                                                                                    <span className='text-xs text-pri font-semibold'>شارع الحرية</span>
+                                                                                    <span className='text-xs text-pri font-semibold'>{contextMenu[0].name_street}</span>
                                                                                 </div>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>رقم العمارة</span>
-                                                                                    <span className='text-xs text-pri font-semibold'>10</span>
+                                                                                    <span className='text-xs text-pri font-semibold'>{contextMenu[0].builder_no}</span>
                                                                                 </div>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>رقم دور العمارة</span>
-                                                                                    <span className='text-xs text-pri font-semibold'>2</span>
+                                                                                    <span className='text-xs text-pri font-semibold'>{contextMenu[0].floor_no}</span>
                                                                                 </div>
                                                                                 <div className='flex items-center space-x-2 space-x-reverse'>
                                                                                     <span className='text-xs text-sec font-normal'>نوع التوصيل</span>
-                                                                                    <span className='text-xs text-pri font-semibold'>منزل</span>
+                                                                                    <span className='text-xs text-pri font-semibold'>{!contextMenu[0].builder_type ? 'منزل' : 'عمل'}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </div>

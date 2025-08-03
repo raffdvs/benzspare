@@ -136,38 +136,39 @@ app.get('/api/search', (req, res) => {
 
 app.get('/api/shop', (req, res) => {
     const sql = `
-    SELECT 
-        p.id,
-        p.title,
-        p.quantity,
-        p.image,
-        p.price,
-        p.type_id,
-        t.type AS type_name,
-        s.name AS section_name,     -- <<< اسم القسم
-        p.mark,
-        p.model,
-        p.date,
-        ROUND(COALESCE(AVG(r.rating), 0), 1) AS average_rating,
-        COALESCE(COUNT(r.rating), 0) AS total_ratings,
-        CASE WHEN sv.user_id = ? THEN 1 ELSE 0 END AS is_saved
-    FROM 
-        products p
-    LEFT JOIN 
-        ratings r ON p.id = r.product_id
-    LEFT JOIN
-        types t ON p.type_id = t.id
-    LEFT JOIN 
-        sections s ON t.id_section = s.id    -- <<< ربط القسم
-    LEFT JOIN 
-        saves sv ON p.id = sv.product_id
-    LEFT JOIN 
-        users u ON sv.user_id = u.id
-    GROUP BY 
-        p.id
-    ORDER BY 
-        average_rating DESC
-    LIMIT 20;
+SELECT 
+    p.id,
+    MAX(p.title) AS title,
+    MAX(p.quantity) AS quantity,
+    MAX(p.image) AS image,
+    MAX(p.price) AS price,
+    MAX(p.type_id) AS type_id,
+    MAX(t.type) AS type_name,
+    MAX(s.name) AS section_name,
+    MAX(p.mark) AS mark,
+    MAX(p.model) AS model,
+    MAX(p.date) AS date,
+    ROUND(COALESCE(AVG(r.rating), 0), 1) AS average_rating,
+    COUNT(r.rating) AS total_ratings,
+    MAX(CASE WHEN sv.user_id = ? THEN 1 ELSE 0 END) AS is_saved
+FROM 
+    products p
+LEFT JOIN 
+    ratings r ON p.id = r.product_id
+LEFT JOIN 
+    types t ON p.type_id = t.id
+LEFT JOIN 
+    sections s ON t.id_section = s.id
+LEFT JOIN 
+    saves sv ON p.id = sv.product_id
+LEFT JOIN 
+    users u ON sv.user_id = u.id
+GROUP BY 
+    p.id
+ORDER BY 
+    average_rating DESC
+LIMIT 20;
+
 `;
 
     db.query(sql, [111], (err, results) => {
@@ -241,27 +242,27 @@ app.get('/api/product', (req, res) => {
         const sql = `
 SELECT 
   p.id AS product_id,
-  p.title AS t,
-  p.price AS p,
-  p.quantity AS q,
-  p.image AS i,
-  p.type_id AS ty,
-  mk.mark AS mn,
-  mk.logo_id AS mli,
-  ml.model AS mln,
+  MAX(p.title) AS t,
+  MAX(p.price) AS p,
+  MAX(p.quantity) AS q,
+  MAX(p.image) AS i,
+  MAX(p.type_id) AS ty,
+  MAX(mk.mark) AS mn,
+  MAX(mk.logo_id) AS mli,
+  MAX(ml.model) AS mln,
+  MAX(t.type) AS type_name,
+  MAX(s.id) AS section_id,
+  MAX(s.name) AS section_name,
   
-    t.type AS type_name,
-    s.id AS section_id,
-    s.name AS section_name,
- ROUND(COALESCE(AVG(r.rating), 0), 1) AS average_rating,
-  COALESCE(COUNT(r.rating), 0) AS total_ratings,
+  ROUND(COALESCE(AVG(r.rating), 0), 1) AS average_rating,
+  COUNT(r.rating) AS total_ratings,
 
-
-    COUNT(CASE WHEN r.rating = 5 THEN 1 END) AS st_5,
+  COUNT(CASE WHEN r.rating = 5 THEN 1 END) AS st_5,
   COUNT(CASE WHEN r.rating = 4 THEN 1 END) AS st_4,
   COUNT(CASE WHEN r.rating = 3 THEN 1 END) AS st_3,
   COUNT(CASE WHEN r.rating = 2 THEN 1 END) AS st_2,
   COUNT(CASE WHEN r.rating = 1 THEN 1 END) AS st_1
+
 FROM 
   products p
 LEFT JOIN 
@@ -270,16 +271,20 @@ INNER JOIN
   marks mk ON p.mark = mk.id
 INNER JOIN 
   models ml ON ml.mark_id = mk.id
-       LEFT JOIN
-            types t ON p.type_id = t.id
-        LEFT JOIN 
-        sections s ON t.id_section = p.type_id
+LEFT JOIN
+  types t ON p.type_id = t.id
+LEFT JOIN 
+  sections s ON t.id_section = s.id
+
 WHERE 
   p.title = ?
+
 GROUP BY 
-  p.id, mk.mark, mk.logo_id, ml.model, t.type
+  p.id
+
 ORDER BY 
   average_rating DESC;
+
 
 
       `;
@@ -378,20 +383,20 @@ app.get('/api/response', (req, res) => {
     if (req.query.type === 'home.sections') {
 
         const sql = `
-    SELECT 
-        s.id,
-        s.name ,
-        s.image AS img,
-        s.date,
-        COUNT(t.id) AS total_types
-    FROM 
-        sections s
-    LEFT JOIN 
-        types t ON t.id_section = s.id
-    GROUP BY 
-        s.id, s.name, s.image, s.date
-    ORDER BY 
-        s.date DESC;
+SELECT 
+    s.id,
+    MAX(s.name) AS name,
+    MAX(s.image) AS img,
+    MAX(s.date) AS date,
+    COUNT(t.id) AS total_types
+FROM 
+    sections s
+LEFT JOIN 
+    types t ON t.id_section = s.id
+GROUP BY 
+    s.id
+ORDER BY 
+    MAX(s.date) DESC;
 `;
         db.query(sql, (err, results) => {
             if (err) {
@@ -412,35 +417,34 @@ app.get('/api/response', (req, res) => {
     if (req.query.type === 'home.bestSelling') {
 
         const sql = `
-        SELECT 
-            p.id,
-            p.title,
-            p.quantity,
-            p.image,
-            p.price,
-            p.type_id,
-            t.type AS type_name,
-            s.name AS section_name,
-            p.mark,
-            p.model,
-            p.date,
-            ROUND(COALESCE(AVG(r.rating), 0), 1) AS average_rating,
-            COALESCE(COUNT(r.rating), 0) AS total_ratings
-        FROM 
-            products p
-        LEFT JOIN 
-            ratings r ON p.id = r.product_id
-        LEFT JOIN
-            types t ON p.type_id = t.id
-        LEFT JOIN 
-        sections s ON t.id_section = p.type_id
-        WHERE 
-            r.rating IS NOT NULL
-        GROUP BY 
-            p.id
-        ORDER BY 
-            average_rating DESC
-        LIMIT 20;
+SELECT 
+    p.id,
+    p.title,
+    p.quantity,
+    p.image,
+    p.price,
+    p.type_id,
+    t.type AS type_name,
+    s.name AS section_name,
+    p.mark,
+    p.model,
+    p.date,
+    ROUND(COALESCE(AVG(r.rating), 0), 1) AS average_rating,
+    COALESCE(COUNT(r.rating), 0) AS total_ratings
+FROM 
+    products p
+LEFT JOIN 
+    ratings r ON p.id = r.product_id
+LEFT JOIN 
+    types t ON p.type_id = t.id
+LEFT JOIN 
+    sections s ON t.id_section = s.id
+GROUP BY 
+    p.id
+ORDER BY 
+    average_rating DESC
+LIMIT 20;
+
     `;
 
         db.query(sql, (err, results) => {
@@ -502,6 +506,14 @@ app.get('/api/response', (req, res) => {
                 m.id_user,
                 m.name,
                 m.no,
+                m.type_pay,
+                m.recipient_name,
+                m.phone,
+                m.address,
+                m.name_street,
+                m.builder_no,
+                m.floor_no,
+                m.builder_type,
                 m.date
             FROM 
                 menus m
@@ -523,6 +535,14 @@ app.get('/api/response', (req, res) => {
                         menus: details.map(m => ({
                             name: m.name,
                             number_code: m.no,
+                            type_pay: m.type_pay,
+                            recipient_name: m.recipient_name,
+                            phone: m.phone,
+                            address: m.address,
+                            name_street: m.name_street,
+                            builder_no: m.builder_no,
+                            floor_no: m.floor_no,
+                            builder_type: m.builder_type,
                             date: m.date,
                         }))
                     }

@@ -211,15 +211,14 @@ export default function Home() {
                                         <div className='grid space-y-3'>
                                             <div className='relative h-[168px] min-w-[168px] group'>
 
-                                                <Link to={`/product/asd`} className='preventDefault group rounded-3xl'>
-                                                    <div class="absolute transition duration-100 h-[168px] min-w-[168px] left-0 top-0 inset-0 rounded-3xl group-hover:blur-sm opacity-70 -z-10 bg-gradient-to-t from-pri to-pri"></div>
+                                                <Link to={`/product/asd`} className={`relative h-[168px] min-w-[168px] group rounded-3xl before:content-[''] before:pointer-events-none before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-sec04 before:hover:bg-sec08 before:transition before:duration-100 before:rounded-2xl`}>
 
-                                                    <img src={`/img/${section.img}.jpg`} className=' h-[168px] min-w-[168px] rounded-3xl shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_2px_rgba(204,0,35,1)]'></img>
+                                                    <img src={`/img/1.png`} className='h-[168px] min-w-[168px] scale-[.9]'></img>
                                                 </Link>
                                             </div>
                                             <div className='flex items-center justify-between'>
                                                 <span className='text-sm font-semibold'>{section.name}</span>
-                                                <span className='flex items-center text-xs font-normal h-[24px] px-3 rounded-full text-white bg-pri'>{section.total_types} فئات</span>
+                                                <span className='flex items-center text-xs font-normal h-[24px] px-3 rounded-full text-white bg-sec'>{section.total_types} فئات</span>
                                             </div>
                                         </div>
                                     ))}
@@ -264,10 +263,9 @@ export default function Home() {
                                     <div className='flwd space-y-2'>
                                         <div className='flex fwid h-center'>
                                             <div className='relative h-[168px] min-w-[168px] group'>
-                                                <Link to={`/product/${service.title}`} className='preventDefault group rounded-3xl'>
-                                                    <div class="absolute transition duration-100 h-[168px] min-w-[168px] left-0 top-0 inset-0 rounded-3xl group-hover:blur-sm opacity-70 -z-10 bg-gradient-to-t from-pri to-pri"></div>
+                                                <Link to={`/product/${service.title}`} className={`relative h-[168px] min-w-[168px] group rounded-3xl before:content-[''] before:pointer-events-none before:absolute before:left-0 before:top-0 before:w-full before:h-full before:bg-sec04 before:hover:bg-sec08 before:transition before:duration-100 before:rounded-2xl`}>
 
-                                                    <img src={`/img/${service.image}.jpg`} className=' h-[168px] min-w-[168px] rounded-3xl transition all duration-100 shadow-[0_0_0_2px_rgba(2,0,3,0.1)] group-hover:shadow-[0_0_0_2px_rgba(204,0,35,1)]'></img>
+                                                    <img src={`/img/${service.image}.png`} className='h-[168px] min-w-[168px] scale-[.9]'></img>
                                                 </Link>
                                             </div>
                                         </div>
@@ -277,7 +275,7 @@ export default function Home() {
                                                 <div className='text-sec text-sm font-semibold'>{service.title}</div>
                                             </div>
                                             <div className='flex'>
-                                                <div className='text-pri text-xs font-semibold space-x-1 space-x-reverse'><span>{service.section_name}</span><span className='text-sec'>/</span><span>{service.type_name}</span></div>
+                                                <div className='text-sec text-xs font-normal space-x-1 space-x-reverse'><Link to={``} className='hover:text-pri hover:underline'>{service.section_name}</Link><span className='text-sec'>›</span><Link to={``} className='hover:text-pri hover:underline'>{service.type_name}</Link></div>
                                             </div>
                                             <div className='flex'>
                                                 <div>

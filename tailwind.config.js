@@ -8,6 +8,7 @@ module.exports = {
         sec: 'rgba(2, 0, 3, 1)',
         sec08: 'rgba(2, 0, 3, .08)',
         sec04: 'rgba(2, 0, 3, .04)',
+        sec025: 'rgba(2, 0, 3, .025)',
 
       },
     }

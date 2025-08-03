@@ -113,7 +113,6 @@ export default function Product() {
     const [current, setCurrent] = useState(0);
     const sections = [
         { id: 'preview', title: 'معاينة', content: <HomeContent /> },
-        { id: 'description', title: 'الوصف', content: <Description /> },
         { id: 'about', title: 'التقييمات والمراجعات', content: <AboutContent /> },
         { id: 'contact', title: 'منتجات مشابهة', content: <ContactContent /> },
     ];
@@ -122,7 +121,7 @@ export default function Product() {
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/api/product?q=${name_product}`)
             .then((response) => {
-                document.title = `${response.data.message[0].t} / ${process.env.REACT_APP_NAME}`;
+                document.title = `${response.data.message[0].t} | ${process.env.REACT_APP_NAME}`;
 
                 console.log(response.data.message[0]);
                 setService(response.data.message[0]);
@@ -301,55 +300,91 @@ export default function Product() {
 
     function HomeContent() {
         return <>
-            <div className='flex justify-center w-full space-x-12 space-x-reverse'>
-                <div className='GalleryProduct space-y-6'>
-                    <div className='relative grid mb-6 space-y-4'>
-                        <span className='text-2xl text-sec font-semibold'>{service.t}</span>
-                        <div className='flex'>
-                            <div className='text-pri text-xs font-semibold space-x-1 space-x-reverse'><span>{service.section_name}</span><span className='text-sec'>/</span><span>{service.type_name}</span></div>
-                        </div>
-                    </div>
-
-
-                    <div className='flex justify-between w-full space-x-6 space-x-reverse'>
-                        <div className='relative flex flex-col justify-end h-[395px]'>
-                            <div className={`relative h-[58px] w-[58px] shadow-[0_0_0_2px_rgba(204,0,35,1)] rounded-xl`}>
-                                <img src={`/img/${service.i}.jpg`} className='h-[58px] w-[58px] rounded-2xl' />
-                            </div>
-
-                        </div>
-                        <div className={`relative flex justify-center min-w-[calc(100%-58px-1.5rem)] min-w-[490px] h-[395px] p-3 rounded-2xl`}>
-                            <div className={`relative before:content-[''] before:pointer-events-none before:absolute before:left-0 before:top-0 before:w-full before:h-full before:rounded-2xl before:shadow-[0_0_0_2px_rgba(2,0,3,.1)] rounded-3xl`}>
-                                <img src={`/img/${service.i}.jpg`} className='layoutProduct-image rounded-3xl' />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='relative flex items-center justify-between'>
-                        <div className='relative grid'>
-                            <span className='text-sm text-sec/50'>
-                                السعر
-                            </span>
-                            <span className='text-sec text-xl font-semibold underline'>
-                                {formatNumber(0, service.p)} ج.م
-                            </span>
-
-                        </div>
-                        <div>
-                            <button onClick={(event) => (basketSubmet(service.title, service.product_id, event))} className='flex items-center justify-center w-[148px] h-[42px] rounded-full transition duration-150 bg-pri hover:shadow-[0_0_8px_rgba(204,0,35,1)]'>
-                                <span className='text-base font-semibold text-white'>إضافة للسلة</span>
-                            </button>
-                        </div>
-                    </div>
+            {!services.length ? (
+                <div className='flex items-center justify-center min-h-[52px]'>
+                    <div class="spinner"></div>
                 </div>
-            </div>
-        </>;
-    }
+            ) : (
+                <div className='flex justify-center w-full space-x-12 space-x-reverse'>
+                    <div className='GalleryProduct space-y-6'>
+                        <div className='relative grid mb-6 space-y-4'>
+                            <span className='text-3xl text-sec font-semibold'>{service.t}</span >
+                            <div className='flex'>
+                                <div className='text-sec text-xs font-normal space-x-1 space-x-reverse'><Link to={``} className='hover:text-pri hover:underline'>{service.section_name}</Link><span className='text-sec'>›</span><Link to={``} className='hover:text-pri hover:underline'>{service.type_name}</Link></div>
+                            </div>
+                        </div >
+                        <div className='relative flex justify-between w-full space-x-6 space-x-reverse'>
 
-    function Description() {
-        <div>
-            الوصف هنا
-        </div>
+                            <div className='select-none relative space-y-3 min-w-[calc(100vh-218px)]'>
+                                <div className={`relative flex justify-center bg-sec04 min-w-[calc(100vh-218px)] h-[calc(100vh-268px)] rounded-2xl`}>
+                                    <div className={`relative rounded-xl`}>
+                                        <img src={`/img/${service.i}.png`} className='layoutProduct-image rounded-3xl' />
+                                    </div>
+                                </div>
+                                <div className='relative flex items-center justify-center h-[48px] space-x-3 space-x-reverse'>
+                                    <div className={`relative h-[38px] bg-sec04 w-[38px] before:content-[''] before:pointer-events-none before:absolute before:left-0 before:top-0 before:w-full before:h-full before:rounded-lg before:shadow-[0_0_0_2px_rgba(204,0,35,1)] rounded-lg`}>
+                                        <img src={`/img/${service.i}.png`} className='h-[38px] w-[38px] rounded-lg scale-[.9]' />
+                                    </div>
+                                    <div className={`relative h-[38px] w-[38px] bg-sec04 before:content-[''] before:pointer-events-none before:absolute before:left-0 before:top-0 before:w-full before:h-full before:rounded-lg before:shadow-[0_0_0_1px_rgba(2,0,3,.1)] rounded-lg`}>
+                                        <img src={`/img/${service.i}.png`} className='h-[38px] w-[38px] rounded-lg scale-[.9]' />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div>
+                                <div className={`relative min-w-[368px] space-y-6 p-6 rounded-2xl before:content-[''] before:pointer-events-none before:absolute before:left-0 before:top-0 before:w-full before:h-full before:rounded-2xl before:shadow-[0_0_0_1px_rgba(2,0,3,.1)]`}>
+                                    <div className='relative flex flex-col space-y-3'>
+                                        <span className='text-xs text-pri font-semibold'>
+                                            السعر
+                                        </span>
+                                        <span className='text-sec text-xl font-normal'>
+                                            <span>
+                                                {formatNumber(0, service.p)}
+                                            </span>
+                                            <span className='text-xs font-semibold'>
+                                                ج.م
+                                            </span>
+                                        </span>
+
+                                    </div>
+                                    <div>
+                                        <button onClick={(event) => (basketSubmet(service.title, service.product_id, event))} className='flex items-center justify-center w-full h-[48px] rounded-full transition duration-150 bg-sec hover:bg-sec/90 active:scale-[.98] active:bg-sec/95 space-x-2 space-x-reverse'>
+                                            <span className='text-sm font-semibold text-white'>إضافة للسلة</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24" className="fill-transparent stroke-[2px] stroke-white group-hover:stroke-sec/70">
+                                                <rect class="fill-transparent stroke-transparent" width="24" height="24" />
+                                                <path d="M18.45,23H5.55c-1.11,0-2.06-0.78-2.27-1.86l-1.86-9.28c-0.29-1.44,0.81-2.77,2.27-2.77h16.61
+	c1.46,0,2.56,1.34,2.27,2.77l-1.86,9.28C20.51,22.22,19.56,23,18.45,23z M5.04,5.04h13.92 M7.36,1h9.28"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div className='w-full h-[1px] bg-sec08'></div>
+                                    <div className='relative flex flex-col space-y-3 text-sec'>
+                                        <span className='text-xs text-pri font-semibold'>
+                                            تفاصيل المنتج
+                                        </span>
+                                        <div className='flex flex-col space-y-3 text-xs'>
+                                            <div className='flex relative space-x-1 space-x-reverse'>
+                                                <span className='font-light'>الماركة</span>
+                                                <span className='font-semibold'>{service.mn}</span>
+                                            </div>
+                                            <div className='flex relative space-x-1 space-x-reverse'>
+                                                <span className='font-light'>الموديل</span>
+                                                <span className='font-semibold'>{service.mln}</span>
+                                            </div>
+                                            <div className='flex relative space-x-1 space-x-reverse'>
+                                                <span className='font-light'>الكمية المتاحة في المخزن</span>
+                                                <span className='font-semibold'>{service.q} قطعة</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div >
+                </div >
+            )
+            }
+        </>;
     }
 
     function AboutContent() {
@@ -503,7 +538,7 @@ export default function Product() {
                     </Link>
                 </div>
                 <div className={`layoutDisplay`}>
-                    <div className='layoutDisplay-products'>
+                    <div className='relative w-screen layoutDisplay-products'>
                         {services.map((service) => (
                             <div className='p-2'>
                                 <div className='flwd space-y-2'>
@@ -626,7 +661,7 @@ export default function Product() {
                     <div className='flex items-center gap-2 group'>
                         <button
                             key={i}
-                            className={`flex items-center px-3 h-[28px] rounded-full transition duration-50 ${current === i ? "bg-pri scale-[1]" : "shadow-[0_0_0_2px_inset_rgba(2,0,3,.1)] scale-[.9]"
+                            className={`flex items-center px-3 h-[28px] rounded-full transition duration-50 ${current === i ? "bg-sec scale-[1]" : "backdrop-blur-xl bg-sec08 hover:bg-sec/10 scale-[.95]"
                                 }`}
                             onClick={() => scrollToSection(_.id)}
                         >
